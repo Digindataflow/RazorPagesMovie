@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RazorPagesMovie.Data;
+using RazorPagesMovie.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +18,14 @@ else
         options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionMovieContext")));
 }
 var app = builder.Build();
+
+// seed initial data
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
