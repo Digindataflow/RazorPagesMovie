@@ -57,8 +57,78 @@ public static class SeedData
                     Genre = "Western",
                     Price = 3.99M,
                     Rating = "PG-18"
+                },
+
+                new Movie
+                {
+                    Title = "Movie 2",
+                    ReleaseDate = DateTime.Parse("1959-4-15"),
+                    Genre = "Western",
+                    Price = 3.99M,
+                    Rating = "PG-18"
+                },
+
+                new Movie
+                {
+                    Title = "Movie 3",
+                    ReleaseDate = DateTime.Parse("1959-4-15"),
+                    Genre = "Western",
+                    Price = 3.99M,
+                    Rating = "PG-18"
+                },
+
+                new Movie
+                {
+                    Title = "Movie 4",
+                    ReleaseDate = DateTime.Parse("1959-4-15"),
+                    Genre = "Western",
+                    Price = 3.99M,
+                    Rating = "PG-18"
+                },
+
+                new Movie
+                {
+                    Title = "Movie 5",
+                    ReleaseDate = DateTime.Parse("1959-4-15"),
+                    Genre = "Western",
+                    Price = 3.99M,
+                    Rating = "PG-18"
                 }
             );
+            context.SaveChanges();
+
+            var actors = new Actor[]
+            {
+                new Actor{FirstMidName="Carson",LastName="Alexander",BirthDate=DateTime.Parse("2019-09-01")},
+                new Actor{FirstMidName="Meredith",LastName="Alonso",BirthDate=DateTime.Parse("2017-09-01")},
+                new Actor{FirstMidName="Arturo",LastName="Anand",BirthDate=DateTime.Parse("2018-09-01")},
+                new Actor{FirstMidName="Gytis",LastName="Barzdukas",BirthDate=DateTime.Parse("2017-09-01")},
+                new Actor{FirstMidName="Yan",LastName="Li",BirthDate=DateTime.Parse("2017-09-01")},
+                new Actor{FirstMidName="Peggy",LastName="Justice",BirthDate=DateTime.Parse("2016-09-01")},
+                new Actor{FirstMidName="Laura",LastName="Norman",BirthDate=DateTime.Parse("2018-09-01")},
+                new Actor{FirstMidName="Nino",LastName="Olivetto",BirthDate=DateTime.Parse("2019-09-01")}
+            };
+
+            context.Actor.AddRange(actors);
+            context.SaveChanges();
+
+            var ActorMoviePairs = new ActorMoviePair[]
+            {
+                new ActorMoviePair{ActorId=1,MovieId=2,},
+                new ActorMoviePair{ActorId=1,MovieId=3,},
+                new ActorMoviePair{ActorId=1,MovieId=4,},
+                new ActorMoviePair{ActorId=2,MovieId=2,},
+                new ActorMoviePair{ActorId=2,MovieId=5,},
+                new ActorMoviePair{ActorId=2,MovieId=6,},
+                new ActorMoviePair{ActorId=3,MovieId=1},
+                new ActorMoviePair{ActorId=4,MovieId=1},
+                new ActorMoviePair{ActorId=4,MovieId=3,},
+                new ActorMoviePair{ActorId=5,MovieId=4,},
+                new ActorMoviePair{ActorId=6,MovieId=5},
+                new ActorMoviePair{ActorId=7,MovieId=6,},
+            };
+
+            context.ActorMoviePair.AddRange(ActorMoviePairs);
             context.SaveChanges();
         }
     }

@@ -41,32 +41,41 @@ namespace RazorPagesMovie.Pages_Movies
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int id)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
+            if (Movie == null)
+            {
+                return NotFound();
+            }
+
             _context.Attach(Movie).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieExists(Movie.Id))
-                {
-                    return NotFound();
+            // limit which fields to be got from form value in PageContext 
+            // avoid overposting 
+            if (await TryUpdateModelAsync<Movie>(
+                Movie,
+                "movie",   // Prefix for form value.
+                s => s.Title, s => s.ReleaseDate, s => s.Price, s => s.Genre, s => s.Rating)) {
+                try {
+                    await _context.SaveChangesAsync();
                 }
-                else
-                {
-                    throw;
+                catch (DbUpdateConcurrencyException) {
+                    if (!MovieExists(Movie.Id)) {
+                        return NotFound();
+                    }
+                    else {
+                        throw;
+                    }
                 }
+                return RedirectToPage("./Index");
             }
-
-            return RedirectToPage("./Index");
+        
+            return Page();
         }
 
         private bool MovieExists(int id)

@@ -35,4 +35,7 @@ public class Movie
     [StringLength(5)]
     [Required]
     public string Rating { get; set; } = string.Empty;
+
+    [Required]
+    public ICollection<ActorMoviePair> ActorMoviePairs { get; set; } = default!;
 }

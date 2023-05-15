@@ -15,5 +15,14 @@ namespace RazorPagesMovie.Data
         }
 
         public DbSet<RazorPagesMovie.Models.Movie> Movie { get; set; } = default!;
+        public DbSet<RazorPagesMovie.Models.Actor> Actor { get; set; } = default!;
+        public DbSet<RazorPagesMovie.Models.ActorMoviePair> ActorMoviePair { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Movie>().ToTable("Movie");
+            modelBuilder.Entity<Actor>().ToTable("Actor");
+            modelBuilder.Entity<ActorMoviePair>().ToTable("ActorMoviePair");
+        }
     }
 }

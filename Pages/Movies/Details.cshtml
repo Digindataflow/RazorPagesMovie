@@ -41,6 +41,29 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Movie.Rating)
         </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Movie.ActorMoviePairs)
+        </dt>
+        <dd class="col-sm-10">
+            <table class="table">
+                <tr>
+                    <th>Actor First Name</th>
+                    <th>Actor Last Name </th>
+                </tr>
+                @foreach (var item in Model.Movie.ActorMoviePairs)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Actor.FirstMidName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Actor.LastName)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
     </dl>
 </div>
 <div>

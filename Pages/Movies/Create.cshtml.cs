@@ -36,10 +36,21 @@ namespace RazorPagesMovie.Pages_Movies
                 return Page();
             }
 
-            _context.Movie.Add(Movie);
-            await _context.SaveChangesAsync();
+            var emptyMovie = new Movie();
+            // limit which fields to be got from form value in PageContext 
+            // avoid overposting 
+            if (await TryUpdateModelAsync<Movie>(
+                emptyMovie,
+                "movie",   // Prefix for form value.
+                s => s.Title, s => s.ReleaseDate, s => s.Price, s => s.Genre, s => s.Rating)) 
+            {
+                _context.Movie.Add(Movie);
+                await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+                return RedirectToPage("./Index");
+            }
+            return Page();
+
         }
     }
 }

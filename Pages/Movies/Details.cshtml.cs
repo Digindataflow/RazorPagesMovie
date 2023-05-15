@@ -28,7 +28,11 @@ namespace RazorPagesMovie.Pages_Movies
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _context.Movie
+                .Include(s => s.ActorMoviePairs)
+                .ThenInclude(e => e.Actor)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (movie == null)
             {
                 return NotFound();
