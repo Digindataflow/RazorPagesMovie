@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using RazorPagesMovie.Data;
+using RazorPagesMovie.Utils;
 using RazorPagesMovie.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 

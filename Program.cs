@@ -33,6 +33,11 @@ using (var scope = app.Services.CreateScope())
     // var context = services.GetRequiredService<RazorPagesMovieContext>();
     // context.Database.EnsureCreated();
     SeedData.Initialize(services);
+
+    // to use migrations 
+    // run dotnet ef database drop
+    // dotnet ef migrations add migrationName
+    // dotnet ef database update
 }
 
 // Configure the HTTP request pipeline.

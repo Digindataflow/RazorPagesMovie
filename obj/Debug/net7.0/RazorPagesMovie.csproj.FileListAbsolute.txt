@@ -301,3 +301,4 @@ E:\dotnet\RazorPagesMovie\obj\Debug\net7.0\refint\RazorPagesMovie.dll
 E:\dotnet\RazorPagesMovie\obj\Debug\net7.0\RazorPagesMovie.pdb
 E:\dotnet\RazorPagesMovie\obj\Debug\net7.0\RazorPagesMovie.genruntimeconfig.cache
 E:\dotnet\RazorPagesMovie\obj\Debug\net7.0\ref\RazorPagesMovie.dll
+E:\dotnet\RazorPagesMovie\bin\Debug\net7.0\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll
