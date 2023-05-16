@@ -13,32 +13,42 @@ namespace RazorPagesMovie.Pages_Movies
     public class DeleteModel : PageModel
     {
         private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
+        private readonly ILogger<DeleteModel> _logger;
 
-        public DeleteModel(RazorPagesMovie.Data.RazorPagesMovieContext context)
+
+        public DeleteModel(RazorPagesMovie.Data.RazorPagesMovieContext context, ILogger<DeleteModel> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [BindProperty]
-      public Movie Movie { get; set; } = default!;
+        public Movie Movie { get; set; } = default!;
+        public string ErrorMessage { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+
+        public async Task<IActionResult> OnGetAsync(int? id, bool? saveChangesError)
         {
             if (id == null || _context.Movie == null)
             {
                 return NotFound();
             }
 
-            var movie = await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            var movie = await _context.Movie
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null)
             {
                 return NotFound();
             }
-            else 
+
+            if (saveChangesError.GetValueOrDefault())
             {
-                Movie = movie;
+                ErrorMessage = String.Format("Delete {ID} failed. Try again", id);
             }
+            Movie = movie;
+
             return Page();
         }
 
@@ -50,14 +60,26 @@ namespace RazorPagesMovie.Pages_Movies
             }
             var movie = await _context.Movie.FindAsync(id);
 
-            if (movie != null)
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            try 
             {
                 Movie = movie;
                 _context.Movie.Remove(Movie);
                 await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, ErrorMessage);
 
-            return RedirectToPage("./Index");
+                return RedirectToAction("./Delete",
+                                     new { id, saveChangesError = true });
+            }
+            
         }
     }
 }
