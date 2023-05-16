@@ -18645,8 +18645,18 @@
   "RootNamespace": "RazorPagesMovie",
   "Documents": [
     {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Directors\\Index.cshtml",
+      "TargetPath": "Pages\\Directors\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\_ViewImports.cshtml",
       "TargetPath": "Pages\\_ViewImports.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Actors\\Edit.cshtml",
+      "TargetPath": "Pages\\Actors\\Edit.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -18665,8 +18675,38 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Actors\\Create.cshtml",
+      "TargetPath": "Pages\\Actors\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Directors\\Delete.cshtml",
+      "TargetPath": "Pages\\Directors\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Studios\\Create.cshtml",
+      "TargetPath": "Pages\\Studios\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Studios\\Delete.cshtml",
+      "TargetPath": "Pages\\Studios\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Studios\\Index.cshtml",
+      "TargetPath": "Pages\\Studios\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Movies\\Delete.cshtml",
       "TargetPath": "Pages\\Movies\\Delete.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Actors\\Details.cshtml",
+      "TargetPath": "Pages\\Actors\\Details.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -18677,6 +18717,21 @@
     {
       "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Index.cshtml",
       "TargetPath": "Pages\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Directors\\Details.cshtml",
+      "TargetPath": "Pages\\Directors\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Actors\\Index.cshtml",
+      "TargetPath": "Pages\\Actors\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Actors\\Delete.cshtml",
+      "TargetPath": "Pages\\Actors\\Delete.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -18695,13 +18750,33 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Studios\\Edit.cshtml",
+      "TargetPath": "Pages\\Studios\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Movies\\Details.cshtml",
       "TargetPath": "Pages\\Movies\\Details.cshtml",
       "FileKind": "mvc"
     },
     {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Directors\\Edit.cshtml",
+      "TargetPath": "Pages\\Directors\\Edit.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\About.cshtml",
       "TargetPath": "Pages\\About.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Directors\\Create.cshtml",
+      "TargetPath": "Pages\\Directors\\Create.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Studios\\Details.cshtml",
+      "TargetPath": "Pages\\Studios\\Details.cshtml",
       "FileKind": "mvc"
     },
     {

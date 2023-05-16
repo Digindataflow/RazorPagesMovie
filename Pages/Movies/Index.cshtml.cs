@@ -24,6 +24,8 @@ namespace RazorPagesMovie.Pages_Movies
         }
 
         public PaginatedList<Movie> Movie { get;set; } = default!;
+
+        // sort, paging, search 
         public string? TitleSort { get; set; }
         public string? DateSort { get; set; }
         [BindProperty(SupportsGet = true)]
@@ -89,7 +91,11 @@ namespace RazorPagesMovie.Pages_Movies
             // get record list 
             // data is not cached and tracked, save RAM 
             var pageSize = Configuration.GetValue("PageSize", 4);
-            Movie = await PaginatedList<Movie>.CreateAsync(movies.AsNoTracking(), pageIndex ?? 1, pageSize);
+            Movie = await PaginatedList<Movie>.CreateAsync(
+                movies.AsNoTracking().Include(s => s.Studio), 
+                pageIndex ?? 1, 
+                pageSize
+            );
         }
 
 

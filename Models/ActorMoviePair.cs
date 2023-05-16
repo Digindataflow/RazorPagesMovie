@@ -13,4 +13,9 @@ public class ActorMoviePair {
 
     public Movie Movie { get; set; } = default!;
     public Actor Actor { get; set; } = default!;
+
+
+    [StringLength(50)]
+    public string Performance { get; set; } = string.Empty;
+
 }

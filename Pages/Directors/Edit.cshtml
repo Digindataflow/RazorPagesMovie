@@ -1,0 +1,45 @@
+@page
+@model RazorPagesMovie.Pages.Directors.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Director</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Director.ID" />
+            <div class="form-group">
+                <label asp-for="Director.LastName" class="control-label"></label>
+                <input asp-for="Director.LastName" class="form-control" />
+                <span asp-validation-for="Director.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Director.FirstMidName" class="control-label"></label>
+                <input asp-for="Director.FirstMidName" class="form-control" />
+                <span asp-validation-for="Director.FirstMidName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Director.HireDate" class="control-label"></label>
+                <input asp-for="Director.HireDate" class="form-control" />
+                <span asp-validation-for="Director.HireDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

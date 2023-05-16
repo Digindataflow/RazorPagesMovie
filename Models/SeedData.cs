@@ -109,9 +109,10 @@ public static class SeedData
                 new Actor{FirstMidName="Laura",LastName="Norman",BirthDate=DateTime.Parse("1993-09-01")},
                 new Actor{FirstMidName="Nino",LastName="Olivetto",BirthDate=DateTime.Parse("1985-09-01")}
             };
-
-            context.Actor.AddRange(actors);
-            context.SaveChanges();
+            if (context.Actor != null) {
+                context.Actor.AddRange(actors);
+                context.SaveChanges();
+            }
 
             var ActorMoviePairs = new ActorMoviePair[]
             {
@@ -129,8 +130,10 @@ public static class SeedData
                 new ActorMoviePair{Actor=actors[7],Movie=movies[6],},
             };
 
-            context.ActorMoviePair.AddRange(ActorMoviePairs);
-            context.SaveChanges();
+            if (context.ActorMoviePair != null) {
+                context.ActorMoviePair.AddRange(ActorMoviePairs);
+                context.SaveChanges();
+            }
         
             var directors = new Director[]
             {
@@ -143,8 +146,10 @@ public static class SeedData
                 new Director{FirstMidName="Laura",LastName="Norman",HireDate=DateTime.Parse("2018-09-01")},
                 new Director{FirstMidName="Nino",LastName="Olivetto",HireDate=DateTime.Parse("2001-09-01")}
             };
-            context.Director.AddRange(directors);
-            context.SaveChanges();
+            if (context.Director != null) {
+                context.Director.AddRange(directors);
+                context.SaveChanges();
+            }
 
             var Homes = new Home[]
             {
@@ -158,9 +163,10 @@ public static class SeedData
                     Director = directors[2],
                     Location = "Thompson 304" }
             };
-
-            context.Home.AddRange(Homes);
-            context.SaveChanges();
+            if (context.Home != null) {
+                context.Home.AddRange(Homes);
+                context.SaveChanges();
+            }
 
             var studios = new Studio[] {
                 new Studio{Name = "Maker First", Budget = 350000, StartDate = DateTime.Parse("2007-09-01"), Director = directors[0]},
@@ -168,8 +174,10 @@ public static class SeedData
                 new Studio{Name = "Maker if", Budget = 35000000, StartDate = DateTime.Parse("1900-09-01"), Director = directors[4]},
                 new Studio{Name = "Maker logos", Budget = 640000, StartDate = DateTime.Parse("1947-09-01"), Director = directors[5]},
             };
-            context.Studio.AddRange(studios);
-            context.SaveChanges();
+            if (context.Studio != null) {
+                context.Studio.AddRange(studios);
+                context.SaveChanges();
+            }
         }
     }
 }
