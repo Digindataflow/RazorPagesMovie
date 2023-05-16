@@ -34,5 +34,6 @@ namespace RazorPagesMovie.Models
         public ICollection<Movie>? Movies { get; set; }
         [DisplayFormat(NullDisplayText = "No studio")]
         public Studio? Studio { get; set; }
+        public Home? Home { get; set; }
     }
 }

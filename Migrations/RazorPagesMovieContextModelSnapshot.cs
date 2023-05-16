@@ -22,12 +22,12 @@ namespace RazorPagesMovie.Migrations
                     b.Property<int>("DirectorsID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("MoviesId")
+                    b.Property<int>("MoviesID")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("DirectorsID", "MoviesId");
+                    b.HasKey("DirectorsID", "MoviesID");
 
-                    b.HasIndex("MoviesId");
+                    b.HasIndex("MoviesID");
 
                     b.ToTable("DirectorMovie");
                 });
@@ -58,21 +58,26 @@ namespace RazorPagesMovie.Migrations
 
             modelBuilder.Entity("RazorPagesMovie.Models.ActorMoviePair", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ActorId")
+                    b.Property<int>("ActorID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("MovieId")
+                    b.Property<int>("MovieID")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Performance")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
 
-                    b.HasIndex("ActorId");
+                    b.HasKey("ID");
 
-                    b.HasIndex("MovieId");
+                    b.HasIndex("ActorID");
+
+                    b.HasIndex("MovieID");
 
                     b.ToTable("ActorMoviePair", (string)null);
                 });
@@ -118,14 +123,15 @@ namespace RazorPagesMovie.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("DirectorID");
+                    b.HasIndex("DirectorID")
+                        .IsUnique();
 
                     b.ToTable("Home", (string)null);
                 });
 
             modelBuilder.Entity("RazorPagesMovie.Models.Movie", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -153,7 +159,7 @@ namespace RazorPagesMovie.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.HasIndex("StudioID");
 
@@ -198,7 +204,7 @@ namespace RazorPagesMovie.Migrations
 
                     b.HasOne("RazorPagesMovie.Models.Movie", null)
                         .WithMany()
-                        .HasForeignKey("MoviesId")
+                        .HasForeignKey("MoviesID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -207,13 +213,13 @@ namespace RazorPagesMovie.Migrations
                 {
                     b.HasOne("RazorPagesMovie.Models.Actor", "Actor")
                         .WithMany("ActorMoviePairs")
-                        .HasForeignKey("ActorId")
+                        .HasForeignKey("ActorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RazorPagesMovie.Models.Movie", "Movie")
                         .WithMany("ActorMoviePairs")
-                        .HasForeignKey("MovieId")
+                        .HasForeignKey("MovieID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -225,8 +231,8 @@ namespace RazorPagesMovie.Migrations
             modelBuilder.Entity("RazorPagesMovie.Models.Home", b =>
                 {
                     b.HasOne("RazorPagesMovie.Models.Director", "Director")
-                        .WithMany()
-                        .HasForeignKey("DirectorID")
+                        .WithOne("Home")
+                        .HasForeignKey("RazorPagesMovie.Models.Home", "DirectorID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -260,6 +266,8 @@ namespace RazorPagesMovie.Migrations
 
             modelBuilder.Entity("RazorPagesMovie.Models.Director", b =>
                 {
+                    b.Navigation("Home");
+
                     b.Navigation("Studio");
                 });
 

@@ -5,7 +5,7 @@ namespace RazorPagesMovie.Models;
 
 public class Movie
 {
-    public int Id { get; set; }
+    public int ID { get; set; }
 
     [StringLength(60, MinimumLength = 3)]
     [Required]

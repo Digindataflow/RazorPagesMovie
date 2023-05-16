@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
 
-namespace RazorPagesMovie.Pages_Movies
+namespace RazorPagesMovie.Pages.Movies
 {
     public class EditModel : PageModel
     {
@@ -30,7 +30,7 @@ namespace RazorPagesMovie.Pages_Movies
                 return NotFound();
             }
 
-            var movie =  await _context.Movie.FirstOrDefaultAsync(m => m.Id == id);
+            var movie =  await _context.Movie.FirstOrDefaultAsync(m => m.ID == id);
             if (movie == null)
             {
                 return NotFound();
@@ -65,7 +65,7 @@ namespace RazorPagesMovie.Pages_Movies
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException) {
-                    if (!MovieExists(Movie.Id)) {
+                    if (!MovieExists(Movie.ID)) {
                         return NotFound();
                     }
                     else {
@@ -80,7 +80,7 @@ namespace RazorPagesMovie.Pages_Movies
 
         private bool MovieExists(int id)
         {
-          return (_context.Movie?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Movie?.Any(e => e.ID == id)).GetValueOrDefault();
         }
     }
 }

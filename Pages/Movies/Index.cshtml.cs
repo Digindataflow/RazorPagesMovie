@@ -10,7 +10,7 @@ using RazorPagesMovie.Utils;
 using RazorPagesMovie.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace RazorPagesMovie.Pages_Movies
+namespace RazorPagesMovie.Pages.Movies
 {
     public class IndexModel : PageModel
     {

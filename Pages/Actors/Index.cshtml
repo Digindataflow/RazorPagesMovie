@@ -2,10 +2,10 @@
 @model RazorPagesMovie.Pages.Actors.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Actors";
 }
 
-<h1>Index</h1>
+<h1>Actors</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -14,19 +14,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Actor[0].LastName)
+                @Html.DisplayNameFor(model => model.Actors[0].LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Actor[0].FirstMidName)
+                @Html.DisplayNameFor(model => model.Actors[0].FirstMidName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Actor[0].BirthDate)
+                @Html.DisplayNameFor(model => model.Actors[0].BirthDate)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Actor) {
+@foreach (var item in Model.Actors) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)

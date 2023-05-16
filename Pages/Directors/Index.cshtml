@@ -1,11 +1,11 @@
-@page
+@page "{id:int?}"
 @model RazorPagesMovie.Pages.Directors.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Directors";
 }
 
-<h1>Index</h1>
+<h1>Directors</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -13,21 +13,23 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Director[0].LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Director[0].FirstMidName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Director[0].HireDate)
-            </th>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Hire Date</th>
+            <th>Home</th>
+            <th>Movies</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Director) {
-        <tr>
+@if (Model.DirectorIndexData != null && Model.DirectorIndexData.Directors != null) {
+    @foreach (var item in Model.DirectorIndexData.Directors) {
+        string selectedRow = "";
+        if (item.ID == Model.DirectorID)
+        {
+            selectedRow = "table-success";
+        }
+        <tr class="@selectedRow">
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
             </td>
@@ -38,11 +40,88 @@
                 @Html.DisplayFor(modelItem => item.HireDate)
             </td>
             <td>
+                @if (item.Home != null) {
+                    @item.Home.Location
+                }
+            </td>
+            <td>
+                @{
+                    @if (item.Movies != null) {
+                        foreach (var movie in item.Movies) {
+                            @movie.ID @:  @movie.Title <br />
+                        }
+                    }
+                }
+            </td>
+            <td>
+                <a asp-page="./Index" asp-route-id="@item.ID">Select</a> |
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
                 <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
             </td>
         </tr>
+    }
 }
     </tbody>
 </table>
+
+@if (Model.DirectorIndexData != null && Model.DirectorIndexData.Movies != null)
+{
+    <h3>Movies directed by Selected Director</h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Number</th>
+            <th>Title</th>
+            <th>Studio</th>
+        </tr>
+
+        @foreach (var item in Model.DirectorIndexData.Movies)
+        {
+            string selectedRow = "";
+            if (item.ID == Model.MovieID)
+            {
+                selectedRow = "table-success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    <a asp-page="./Index" asp-route-movieID="@item.ID">Select</a>
+                </td>
+                <td>
+                    @item.ID
+                </td>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.Studio.Name
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+@if (Model.DirectorIndexData != null && Model.DirectorIndexData.ActorMoviePairs != null)
+{
+    <h3>
+        Actors in Selected Movie
+    </h3>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Performance</th>
+        </tr>
+        @foreach (var item in Model.DirectorIndexData.ActorMoviePairs)
+        {
+            <tr>
+                <td>
+                    @item.Actor.FullName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Performance)
+                </td>
+            </tr>
+        }
+    </table>
+}

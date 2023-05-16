@@ -86,7 +86,7 @@ namespace RazorPagesMovie.Migrations
                 name: "Movie",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", maxLength: 60, nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -97,7 +97,7 @@ namespace RazorPagesMovie.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Movie", x => x.Id);
+                    table.PrimaryKey("PK_Movie", x => x.ID);
                     table.ForeignKey(
                         name: "FK_Movie_Studio_StudioID",
                         column: x => x.StudioID,
@@ -110,25 +110,26 @@ namespace RazorPagesMovie.Migrations
                 name: "ActorMoviePair",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ActorId = table.Column<int>(type: "INTEGER", nullable: false),
-                    MovieId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ActorID = table.Column<int>(type: "INTEGER", nullable: false),
+                    MovieID = table.Column<int>(type: "INTEGER", nullable: false),
+                    Performance = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActorMoviePair", x => x.Id);
+                    table.PrimaryKey("PK_ActorMoviePair", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ActorMoviePair_Actor_ActorId",
-                        column: x => x.ActorId,
+                        name: "FK_ActorMoviePair_Actor_ActorID",
+                        column: x => x.ActorID,
                         principalTable: "Actor",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActorMoviePair_Movie_MovieId",
-                        column: x => x.MovieId,
+                        name: "FK_ActorMoviePair_Movie_MovieID",
+                        column: x => x.MovieID,
                         principalTable: "Movie",
-                        principalColumn: "Id",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -137,11 +138,11 @@ namespace RazorPagesMovie.Migrations
                 columns: table => new
                 {
                     DirectorsID = table.Column<int>(type: "INTEGER", nullable: false),
-                    MoviesId = table.Column<int>(type: "INTEGER", nullable: false)
+                    MoviesID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DirectorMovie", x => new { x.DirectorsID, x.MoviesId });
+                    table.PrimaryKey("PK_DirectorMovie", x => new { x.DirectorsID, x.MoviesID });
                     table.ForeignKey(
                         name: "FK_DirectorMovie_Director_DirectorsID",
                         column: x => x.DirectorsID,
@@ -149,32 +150,33 @@ namespace RazorPagesMovie.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DirectorMovie_Movie_MoviesId",
-                        column: x => x.MoviesId,
+                        name: "FK_DirectorMovie_Movie_MoviesID",
+                        column: x => x.MoviesID,
                         principalTable: "Movie",
-                        principalColumn: "Id",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActorMoviePair_ActorId",
+                name: "IX_ActorMoviePair_ActorID",
                 table: "ActorMoviePair",
-                column: "ActorId");
+                column: "ActorID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActorMoviePair_MovieId",
+                name: "IX_ActorMoviePair_MovieID",
                 table: "ActorMoviePair",
-                column: "MovieId");
+                column: "MovieID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DirectorMovie_MoviesId",
+                name: "IX_DirectorMovie_MoviesID",
                 table: "DirectorMovie",
-                column: "MoviesId");
+                column: "MoviesID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Home_DirectorID",
                 table: "Home",
-                column: "DirectorID");
+                column: "DirectorID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Movie_StudioID",

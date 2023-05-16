@@ -41,7 +41,9 @@
                 @Html.DisplayFor(modelItem => item.StartDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Director.FirstMidName)
+                @if (item.Director != null) {
+                    @Html.DisplayFor(modelItem => item.Director.FirstMidName)
+                }
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |

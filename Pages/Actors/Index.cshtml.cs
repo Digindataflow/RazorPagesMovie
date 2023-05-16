@@ -19,13 +19,13 @@ namespace RazorPagesMovie.Pages.Actors
             _context = context;
         }
 
-        public IList<Actor> Actor { get;set; } = default!;
+        public IList<Actor> Actors { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
             if (_context.Actor != null)
             {
-                Actor = await _context.Actor.ToListAsync();
+                Actors = await _context.Actor.ToListAsync();
             }
         }
     }

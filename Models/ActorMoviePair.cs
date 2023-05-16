@@ -5,11 +5,11 @@ namespace RazorPagesMovie.Models;
 
 public class ActorMoviePair {
 
-    public int Id { get; set; }
+    public int ID { get; set; }
     [Required]
-    public int ActorId { get; set; }
+    public int ActorID { get; set; }
     [Required]
-    public int MovieId { get; set; }
+    public int MovieID { get; set; }
 
     public Movie Movie { get; set; } = default!;
     public Actor Actor { get; set; } = default!;
