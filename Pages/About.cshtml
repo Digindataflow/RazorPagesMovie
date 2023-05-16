@@ -1,0 +1,31 @@
+@page
+@model RazorPagesMovie.Pages.AboutModel
+
+@{
+    ViewData["Title"] = "Actor Statistics";
+}
+
+<h2>Actor Statistics</h2>
+
+<table>
+    <tr>
+        <th>
+            Birth Date
+        </th>
+        <th>
+            Actors
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Actors)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+            <td>
+                @item.ActorCount
+            </td>
+        </tr>
+    }
+</table>

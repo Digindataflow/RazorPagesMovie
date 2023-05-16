@@ -16,7 +16,7 @@
         <select asp-for="MovieGenre" asp-items="Model.Genres">
             <option value="">All</option>
         </select>
-        Title: <input type="text" asp-for="SearchString" value="@Model.SearchString"/>
+        Title: <input type="text" asp-for="SearchString" value="@Model.CurrentFilter"/>
         <input type="submit" value="Filter" class="btn btn-primary" />
         <a asp-page="./Index">Back to full List</a>
     </p>
@@ -26,13 +26,15 @@
     <thead>
         <tr>
             <th>
-                <a asp-page="./Index" asp-route-sortOrder="@Model.TitleSort">
-                @Html.DisplayNameFor(model => model.Movie[0].Title)
+                <a asp-page="./Index" asp-route-CurrentSort="@Model.TitleSort"
+                    asp-route-CurrentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Movie[0].Title)
                 </a>
             </th>
             <th>
-                <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort">
-                @Html.DisplayNameFor(model => model.Movie[0].ReleaseDate)
+                <a asp-page="./Index" asp-route-CurrentSort="@Model.DateSort"
+                    asp-route-CurrentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Movie[0].ReleaseDate)
                 </a>
             </th>
             <th>
@@ -74,3 +76,23 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.Movie.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Movie.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-CurrentSort="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Movie.PageIndex - 1)"
+   asp-route-CurrentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Index"
+   asp-route-CurrentSort="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Movie.PageIndex + 1)"
+   asp-route-CurrentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>

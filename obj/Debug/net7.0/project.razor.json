@@ -18700,6 +18700,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\About.cshtml",
+      "TargetPath": "Pages\\About.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "e:\\dotnet\\RazorPagesMovie\\Pages\\Error.cshtml",
       "TargetPath": "Pages\\Error.cshtml",
       "FileKind": "mvc"
