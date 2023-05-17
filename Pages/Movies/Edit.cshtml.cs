@@ -11,7 +11,7 @@ using RazorPagesMovie.Models;
 
 namespace RazorPagesMovie.Pages.Movies
 {
-    public class EditModel : PageModel
+    public class EditModel : StudioNamePageModel
     {
         private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
 
@@ -30,12 +30,15 @@ namespace RazorPagesMovie.Pages.Movies
                 return NotFound();
             }
 
-            var movie =  await _context.Movie.FirstOrDefaultAsync(m => m.ID == id);
+            var movie =  await _context.Movie
+                .Include(c => c.Studio)
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (movie == null)
             {
                 return NotFound();
             }
             Movie = movie;
+            PopulateStudiosDropDownList(_context, Movie.StudioID);
             return Page();
         }
 
@@ -60,7 +63,7 @@ namespace RazorPagesMovie.Pages.Movies
             if (await TryUpdateModelAsync<Movie>(
                 Movie,
                 "movie",   // Prefix for form value.
-                s => s.Title, s => s.ReleaseDate, s => s.Price, s => s.Genre, s => s.Rating)) {
+                s => s.Title, s => s.ReleaseDate, s => s.Price, s => s.Genre, s => s.Rating, s => s.StudioID)) {
                 try {
                     await _context.SaveChangesAsync();
                 }
@@ -75,6 +78,8 @@ namespace RazorPagesMovie.Pages.Movies
                 return RedirectToPage("./Index");
             }
         
+            // Select StudioID if TryUpdateModelAsync fails.
+            PopulateStudiosDropDownList(_context, Movie.StudioID);
             return Page();
         }
 

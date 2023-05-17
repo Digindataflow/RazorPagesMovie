@@ -10,7 +10,7 @@ using RazorPagesMovie.Models;
 
 namespace RazorPagesMovie.Pages.Movies
 {
-    public class CreateModel : PageModel
+    public class CreateModel : StudioNamePageModel
     {
         private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
 
@@ -20,7 +20,8 @@ namespace RazorPagesMovie.Pages.Movies
         }
 
         public IActionResult OnGet()
-        {
+        {   
+            PopulateStudiosDropDownList(_context);
             return Page();
         }
 
@@ -42,13 +43,15 @@ namespace RazorPagesMovie.Pages.Movies
             if (await TryUpdateModelAsync<Movie>(
                 emptyMovie,
                 "movie",   // Prefix for form value.
-                s => s.Title, s => s.ReleaseDate, s => s.Price, s => s.Genre, s => s.Rating)) 
+                s => s.Title, s => s.ReleaseDate, s => s.Price, s => s.Genre, s => s.Rating, s => s.StudioID)) 
             {
                 _context.Movie.Add(Movie);
                 await _context.SaveChangesAsync();
 
                 return RedirectToPage("./Index");
             }
+            // Select StudioID if TryUpdateModelAsync fails.
+            PopulateStudiosDropDownList(_context, emptyMovie.StudioID);
             return Page();
 
         }

@@ -29,6 +29,7 @@ namespace RazorPagesMovie.Pages.Movies
             }
 
             var movie = await _context.Movie
+                .Include(c => c.Studio)
                 .Include(s => s.ActorMoviePairs)
                 .ThenInclude(e => e.Actor)
                 .AsNoTracking()

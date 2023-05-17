@@ -36,6 +36,7 @@ namespace RazorPagesMovie.Pages.Movies
 
             var movie = await _context.Movie
                 .AsNoTracking()
+                .Include(c => c.Studio)
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (movie == null)
