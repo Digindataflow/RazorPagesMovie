@@ -33,7 +33,9 @@ namespace RazorPagesMovie.Data
             modelBuilder.Entity<Movie>().ToTable(nameof(Movie))
                 .HasMany(c => c.Directors)
                 .WithMany(i => i.Movies);
-            modelBuilder.Entity<Studio>().ToTable(nameof(Studio));
+            modelBuilder.Entity<Studio>().ToTable(nameof(Studio))
+                .Property(d => d.ConcurrencyToken)
+                .IsConcurrencyToken();
             modelBuilder.Entity<Actor>().ToTable(nameof(Actor));
             modelBuilder.Entity<ActorMoviePair>().ToTable("ActorMoviePair");
             modelBuilder.Entity<Director>().ToTable(nameof(Director));

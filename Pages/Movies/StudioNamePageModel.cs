@@ -12,7 +12,7 @@ namespace RazorPagesMovie.Pages.Movies
         public SelectList? StudioNameSL { get; set; }
 
         public void PopulateStudiosDropDownList(RazorPagesMovieContext _context,
-            object selectedStudio = null)
+            object? selectedStudio = null)
         {
             var studiosQuery = from d in _context.Studio
                                    orderby d.Name // Sort by name.

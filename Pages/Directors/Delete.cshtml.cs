@@ -20,7 +20,7 @@ namespace RazorPagesMovie.Pages.Directors
         }
 
         [BindProperty]
-      public Director Director { get; set; } = default!;
+        public Director Director { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -48,14 +48,24 @@ namespace RazorPagesMovie.Pages.Directors
             {
                 return NotFound();
             }
-            var director = await _context.Director.FindAsync(id);
+            var director = await _context.Director
+                .Include(i => i.Movies)
+                .SingleAsync(i => i.ID == id);
 
-            if (director != null)
+            if (director == null)
             {
-                Director = director;
-                _context.Director.Remove(Director);
-                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
+            if (_context.Home != null ) {
+                var homes = await _context.Home
+                    .Where(d => d.DirectorID == id)
+                    .ToListAsync();
+                homes.ForEach(d => d.DirectorID = null);
+            }
+
+            Director = director;
+            _context.Director.Remove(Director);
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

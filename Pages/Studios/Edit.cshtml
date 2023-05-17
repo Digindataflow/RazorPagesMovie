@@ -1,4 +1,4 @@
-@page
+@page "{id:int}"
 @model RazorPagesMovie.Pages.Studios.EditModel
 
 @{
@@ -14,6 +14,14 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Studio.ID" />
+            <input type="hidden" asp-for="Studio.ConcurrencyToken" />
+            <div class="form-group">
+                <label>Version</label>
+                @if (Model.Studio != null)
+                {
+                    @Utils.Utility.GetLastChars(Model.Studio.ConcurrencyToken)
+                }
+            </div>
             <div class="form-group">
                 <label asp-for="Studio.Name" class="control-label"></label>
                 <input asp-for="Studio.Name" class="form-control" />
@@ -31,7 +39,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Studio.DirectorID" class="control-label"></label>
-                <select asp-for="Studio.DirectorID" class="form-control" asp-items="ViewBag.DirectorID"></select>
+                <select asp-for="Studio.DirectorID" class="form-control"
+                        asp-items="@Model.DirectorNameSL"></select>
                 <span asp-validation-for="Studio.DirectorID" class="text-danger"></span>
             </div>
             <div class="form-group">

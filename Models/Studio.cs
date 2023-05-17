@@ -23,6 +23,8 @@ namespace RazorPagesMovie.Models
         [Display(Name = "Start Date")]
         public DateTime StartDate { get; set; }
 
+        public Guid ConcurrencyToken { get; set; } = Guid.NewGuid();
+
         public int? DirectorID { get; set; }
         [DisplayFormat(NullDisplayText = "No director")]
         public Director? Director { get; set; }

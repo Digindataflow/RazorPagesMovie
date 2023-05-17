@@ -25,6 +25,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Studios[0].Director)
             </th>
+            <th>
+                Token
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -42,9 +45,12 @@
             </td>
             <td>
                 @if (item.Director != null) {
-                    @Html.DisplayFor(modelItem => item.Director.FirstMidName)
+                    @Html.DisplayFor(modelItem => item.Director.FullName)
                 }
             </td>
+                <td>
+                    @Utils.Utility.GetLastChars(item.ConcurrencyToken)
+                </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |

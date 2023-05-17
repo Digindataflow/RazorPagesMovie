@@ -7,11 +7,11 @@ namespace RazorPagesMovie.Models
     {
 
         public int ID { get; set; }
-        public int DirectorID { get; set; }
+        public int? DirectorID { get; set; }
         [StringLength(50)]
         [Display(Name = "Home Location")]
         public string Location { get; set; } = string.Empty;
 
-        public Director Director { get; set; } = default!;
+        public Director? Director { get; set; }
     }
 }

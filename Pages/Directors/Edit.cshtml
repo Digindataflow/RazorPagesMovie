@@ -30,6 +30,38 @@
                 <span asp-validation-for="Director.HireDate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Director.Home.Location" class="control-label"></label>
+                <input asp-for="Director.Home.Location" class="form-control" />
+                <span asp-validation-for="Director.Home.Location" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="table">
+                    <table>
+                        <tr>
+                            @{
+                                int cnt = 0;
+
+                                if (Model.DirectedMoviesDataList != null) {
+                                    foreach (var m in Model.DirectedMoviesDataList){
+                                        if (cnt++ % 3 == 0)
+                                        {
+                                            @:</tr><tr>
+                                        }
+                                        @:<td>
+                                            <input type="checkbox"
+                                                name="selectedMovies"
+                                                value="@m.MovieID"
+                                                @(Html.Raw(m.Directed ? "checked=\"checked\"" : "")) />
+                                                @m.MovieID @:  @m.Title
+                                        @:</td>
+                                    }
+                                }
+                                @:</tr>
+                            }
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
