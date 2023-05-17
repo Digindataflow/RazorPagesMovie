@@ -20,25 +20,37 @@ namespace RazorPagesMovie.Pages.Studios
         }
 
         [BindProperty]
-      public Studio Studio { get; set; } = default!;
+        public Studio? Studio { get; set; }
+        public string ConcurrencyErrorMessage { get; set; } = string.Empty;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id, bool? concurrencyError)
         {
             if (id == null || _context.Studio == null)
             {
                 return NotFound();
             }
 
-            var studio = await _context.Studio.FirstOrDefaultAsync(m => m.ID == id);
+            var studio = await _context.Studio
+                .Include(d => d.Director)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
 
             if (studio == null)
             {
                 return NotFound();
             }
-            else 
+            
+            Studio = studio;
+
+            if (concurrencyError.GetValueOrDefault())
             {
-                Studio = studio;
+                ConcurrencyErrorMessage = "The record you attempted to delete "
+                  + "was modified by another user after you selected delete. "
+                  + "The delete operation was canceled and the current values in the "
+                  + "database have been displayed. If you still want to delete this "
+                  + "record, click the Delete button again.";
             }
+
             return Page();
         }
 
@@ -50,14 +62,20 @@ namespace RazorPagesMovie.Pages.Studios
             }
             var studio = await _context.Studio.FindAsync(id);
 
-            if (studio != null)
+            try
             {
-                Studio = studio;
-                _context.Studio.Remove(Studio);
-                await _context.SaveChangesAsync();
+                if (studio != null ) {
+                    Studio = studio;
+                    _context.Studio.Remove(Studio);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToPage("./Index");
             }
-
-            return RedirectToPage("./Index");
+            catch (DbUpdateConcurrencyException)
+            {
+                return RedirectToPage("./Delete", new { concurrencyError = true, id = id });
+            }
+            
         }
     }
 }
