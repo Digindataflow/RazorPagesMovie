@@ -30,6 +30,7 @@ namespace RazorPagesMovie.Models
         {
             get { return LastName + ", " + FirstMidName; }
         }
+        
         [DisplayFormat(NullDisplayText = "No movies")]
         public ICollection<Movie>? Movies { get; set; }
         [DisplayFormat(NullDisplayText = "No studio")]

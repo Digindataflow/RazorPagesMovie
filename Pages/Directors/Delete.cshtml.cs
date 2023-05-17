@@ -57,10 +57,8 @@ namespace RazorPagesMovie.Pages.Directors
                 return RedirectToPage("./Index");
             }
             if (_context.Home != null ) {
-                var homes = await _context.Home
-                    .Where(d => d.DirectorID == id)
-                    .ToListAsync();
-                homes.ForEach(d => d.DirectorID = null);
+                _context.Home.RemoveRange(_context.Home.Where(d => d.DirectorID == id));
+                await _context.SaveChangesAsync();
             }
 
             Director = director;

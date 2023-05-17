@@ -14,12 +14,12 @@ namespace RazorPagesMovie.Data
         {
         }
 
-        public DbSet<RazorPagesMovie.Models.Movie>? Movie { get; set; }
-        public DbSet<RazorPagesMovie.Models.Actor>? Actor { get; set; }
-        public DbSet<RazorPagesMovie.Models.ActorMoviePair>? ActorMoviePair { get; set; }
-        public DbSet<RazorPagesMovie.Models.Studio>? Studio { get; set; }
-        public DbSet<RazorPagesMovie.Models.Director>? Director { get; set; }
-        public DbSet<RazorPagesMovie.Models.Home>? Home { get; set; }
+        public DbSet<RazorPagesMovie.Models.Movie> Movie { get; set; } = null!;
+        public DbSet<RazorPagesMovie.Models.Actor> Actor { get; set; } = null!;
+        public DbSet<RazorPagesMovie.Models.ActorMoviePair> ActorMoviePair { get; set; } = null!;
+        public DbSet<RazorPagesMovie.Models.Studio> Studio { get; set; } = null!;
+        public DbSet<RazorPagesMovie.Models.Director> Director { get; set; } = null!;
+        public DbSet<RazorPagesMovie.Models.Home> Home { get; set; } = null!;
 
         /**
         * the fluent API can specify most of the formatting, 

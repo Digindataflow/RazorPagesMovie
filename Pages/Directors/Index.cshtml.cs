@@ -30,8 +30,8 @@ namespace RazorPagesMovie.Pages.Directors
             if (_context.Director != null)
             {
                 DirectorIndexData.Directors = await _context.Director
-                    .Include(i => i.Home)                 
-                    .Include(i => i.Movies)
+                    .Include(i => i.Home!)                 
+                    .Include(i => i.Movies!)
                         .ThenInclude(c => c.Studio)
                     .OrderBy(i => i.LastName)
                     .ToListAsync();

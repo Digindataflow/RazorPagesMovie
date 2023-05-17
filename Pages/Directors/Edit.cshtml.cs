@@ -48,14 +48,16 @@ namespace RazorPagesMovie.Pages.Directors
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(int? id, string[] selectedMovies)
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
 
             if (Director == null)
             {
                 return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                PopulateDirectedMoviesData(_context, Director);
+                return Page();
             }
 
             _context.Attach(Director).State = EntityState.Modified;
@@ -63,7 +65,8 @@ namespace RazorPagesMovie.Pages.Directors
             if (await TryUpdateModelAsync<Director>(
                 Director,
                 "director",   // Prefix for form value.
-                s => s.LastName, s => s.FirstMidName, s => s.HireDate, s => s.Home)) {
+                s => s.LastName, s => s.FirstMidName, s => s.HireDate)) {
+
                     // if home is empty, set it to null 
                     if (String.IsNullOrWhiteSpace(Director.Home?.Location)) {
                         Director.Home = null;

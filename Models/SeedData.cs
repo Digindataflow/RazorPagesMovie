@@ -16,10 +16,37 @@ public static class SeedData
                 throw new ArgumentNullException("Null RazorPagesMovieContext");
             }
 
-            // Look for any movies.
-            if (context.Movie.Any())
+            // Look for any Directors.
+            if (context.Director.Any())
             {
                 return;   // DB has been seeded
+            }
+
+            var directors = new Director[]
+            {
+                new Director{FirstMidName="Carson",LastName="Alexander",HireDate=DateTime.Parse("2019-09-01")},
+                new Director{FirstMidName="Meredith",LastName="Alonso",HireDate=DateTime.Parse("2007-09-01")},
+                new Director{FirstMidName="Arturo",LastName="Anand",HireDate=DateTime.Parse("2018-09-01")},
+                new Director{FirstMidName="Gytis",LastName="Barzdukas",HireDate=DateTime.Parse("2007-09-01")},
+                new Director{FirstMidName="Yan",LastName="Li",HireDate=DateTime.Parse("2011-09-01")},
+                new Director{FirstMidName="Peggy",LastName="Justice",HireDate=DateTime.Parse("2000-09-01")},
+                new Director{FirstMidName="Laura",LastName="Norman",HireDate=DateTime.Parse("2018-09-01")},
+                new Director{FirstMidName="Nino",LastName="Olivetto",HireDate=DateTime.Parse("2001-09-01")}
+            };
+            if (context.Director != null) {
+                context.Director.AddRange(directors);
+                context.SaveChanges();
+            }
+
+            var studios = new Studio[] {
+                new Studio{Name = "Maker First", Budget = 350000, StartDate = DateTime.Parse("2007-09-01"), Director = directors[0]},
+                new Studio{Name = "Maker Second", Budget = 150000, StartDate = DateTime.Parse("2001-09-01"), Director = directors[3]},
+                new Studio{Name = "Maker if", Budget = 35000000, StartDate = DateTime.Parse("1900-09-01"), Director = directors[4]},
+                new Studio{Name = "Maker logos", Budget = 640000, StartDate = DateTime.Parse("1947-09-01"), Director = directors[5]},
+            };
+            if (context.Studio != null) {
+                context.Studio.AddRange(studios);
+                context.SaveChanges();
             }
 
             var movies = new Movie[] {
@@ -29,7 +56,8 @@ public static class SeedData
                     ReleaseDate = DateTime.Parse("1989-2-12"),
                     Genre = "Romantic Comedy",
                     Price = 7.99M,
-                    Rating = "R"
+                    Rating = "R",
+                    Studio = studios[0]
                 },
 
                 new Movie
@@ -38,7 +66,8 @@ public static class SeedData
                     ReleaseDate = DateTime.Parse("1984-3-13"),
                     Genre = "Comedy",
                     Price = 8.99M,
-                    Rating = "PG-13"
+                    Rating = "PG-13",
+                    Studio = studios[0]
                 },
 
                 new Movie
@@ -47,7 +76,8 @@ public static class SeedData
                     ReleaseDate = DateTime.Parse("1986-2-23"),
                     Genre = "Comedy",
                     Price = 9.99M,
-                    Rating = "PG-13"
+                    Rating = "PG-13",
+                    Studio = studios[1]
                 },
 
                 new Movie
@@ -56,7 +86,8 @@ public static class SeedData
                     ReleaseDate = DateTime.Parse("1959-4-15"),
                     Genre = "Western",
                     Price = 3.99M,
-                    Rating = "PG-18"
+                    Rating = "PG-18",
+                    Studio = studios[1]
                 },
 
                 new Movie
@@ -65,7 +96,8 @@ public static class SeedData
                     ReleaseDate = DateTime.Parse("1959-4-15"),
                     Genre = "Western",
                     Price = 3.99M,
-                    Rating = "PG-18"
+                    Rating = "PG-18",
+                    Studio = studios[2]
                 },
 
                 new Movie
@@ -74,7 +106,8 @@ public static class SeedData
                     ReleaseDate = DateTime.Parse("1959-4-15"),
                     Genre = "Western",
                     Price = 3.99M,
-                    Rating = "PG-18"
+                    Rating = "PG-18",
+                    Studio = studios[2]
                 },
 
                 new Movie
@@ -83,7 +116,8 @@ public static class SeedData
                     ReleaseDate = DateTime.Parse("1959-4-15"),
                     Genre = "Western",
                     Price = 3.99M,
-                    Rating = "PG-18"
+                    Rating = "PG-18",
+                    Studio = studios[3]
                 },
 
                 new Movie
@@ -92,7 +126,8 @@ public static class SeedData
                     ReleaseDate = DateTime.Parse("1959-4-15"),
                     Genre = "Western",
                     Price = 3.99M,
-                    Rating = "PG-18"
+                    Rating = "PG-18",
+                    Studio = studios[3]
                 }
             };
             context.Movie.AddRange(movies);
@@ -134,32 +169,19 @@ public static class SeedData
                 context.ActorMoviePair.AddRange(ActorMoviePairs);
                 context.SaveChanges();
             }
-        
-            var directors = new Director[]
-            {
-                new Director{FirstMidName="Carson",LastName="Alexander",HireDate=DateTime.Parse("2019-09-01")},
-                new Director{FirstMidName="Meredith",LastName="Alonso",HireDate=DateTime.Parse("2007-09-01")},
-                new Director{FirstMidName="Arturo",LastName="Anand",HireDate=DateTime.Parse("2018-09-01")},
-                new Director{FirstMidName="Gytis",LastName="Barzdukas",HireDate=DateTime.Parse("2007-09-01")},
-                new Director{FirstMidName="Yan",LastName="Li",HireDate=DateTime.Parse("2011-09-01")},
-                new Director{FirstMidName="Peggy",LastName="Justice",HireDate=DateTime.Parse("2000-09-01")},
-                new Director{FirstMidName="Laura",LastName="Norman",HireDate=DateTime.Parse("2018-09-01")},
-                new Director{FirstMidName="Nino",LastName="Olivetto",HireDate=DateTime.Parse("2001-09-01")}
-            };
-            if (context.Director != null) {
-                context.Director.AddRange(directors);
-                context.SaveChanges();
-            }
 
             var Homes = new Home[]
             {
                 new Home {
+                    DirectorID = directors[0].ID,
                     Director = directors[0],
                     Location = "Smith 17" },
                 new Home {
+                    DirectorID = directors[1].ID,
                     Director = directors[1],
                     Location = "Gowan 27" },
                 new Home {
+                    DirectorID = directors[2].ID,
                     Director = directors[2],
                     Location = "Thompson 304" }
             };
@@ -168,16 +190,7 @@ public static class SeedData
                 context.SaveChanges();
             }
 
-            var studios = new Studio[] {
-                new Studio{Name = "Maker First", Budget = 350000, StartDate = DateTime.Parse("2007-09-01"), Director = directors[0]},
-                new Studio{Name = "Maker Second", Budget = 150000, StartDate = DateTime.Parse("2001-09-01"), Director = directors[3]},
-                new Studio{Name = "Maker if", Budget = 35000000, StartDate = DateTime.Parse("1900-09-01"), Director = directors[4]},
-                new Studio{Name = "Maker logos", Budget = 640000, StartDate = DateTime.Parse("1947-09-01"), Director = directors[5]},
-            };
-            if (context.Studio != null) {
-                context.Studio.AddRange(studios);
-                context.SaveChanges();
-            }
+
         }
     }
 }
