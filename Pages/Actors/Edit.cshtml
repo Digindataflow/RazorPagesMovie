@@ -30,6 +30,33 @@
                 <span asp-validation-for="Actor.BirthDate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <div class="table">
+                    <table>
+                        <tr>
+                            @{
+                                int cnt = 0;
+
+                                if (Model.ActedMovieDataList != null) {
+                                    foreach (var m in Model.ActedMovieDataList){
+                                        if (cnt++ % 3 == 0)
+                                        {
+                                            @:</tr><tr>
+                                        }
+                                        @:<td>
+                                            <input type="checkbox"
+                                                name="selectedMovies"
+                                                value="@m.MovieID"
+                                                @(Html.Raw(m.Acted ? "checked=\"checked\"" : "")) />
+                                                @m.MovieID @:  @m.Title
+                                        @:</td>
+                                    }
+                                }
+                                @:</tr>
+                            }
+                    </table>
+                </div>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>

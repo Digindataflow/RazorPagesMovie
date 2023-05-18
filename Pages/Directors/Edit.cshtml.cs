@@ -64,7 +64,7 @@ namespace RazorPagesMovie.Pages.Directors
 
             if (await TryUpdateModelAsync<Director>(
                 Director,
-                "director",   // Prefix for form value.
+                "Director",   // Prefix for form value.
                 s => s.LastName, s => s.FirstMidName, s => s.HireDate, s => s.Home)) {
 
                     // if home is empty, set it to null 

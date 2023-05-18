@@ -34,6 +34,7 @@ namespace RazorPagesMovie.Pages.Movies
         {
           if (!ModelState.IsValid || _context.Movie == null || Movie == null)
             {
+                PopulateStudiosDropDownList(_context);
                 return Page();
             }
 
@@ -42,7 +43,7 @@ namespace RazorPagesMovie.Pages.Movies
             // avoid overposting 
             if (await TryUpdateModelAsync<Movie>(
                 emptyMovie,
-                "movie",   // Prefix for form value.
+                "Movie",   // Prefix for form value.
                 s => s.Title, s => s.ReleaseDate, s => s.Price, s => s.Genre, s => s.Rating, s => s.StudioID)) 
             {
                 _context.Movie.Add(Movie);

@@ -11,7 +11,7 @@ using RazorPagesMovie.Models;
 
 namespace RazorPagesMovie.Pages.Actors
 {
-    public class EditModel : PageModel
+    public class EditModel : ActorMoviePageModel
     {
         private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
 
@@ -36,42 +36,86 @@ namespace RazorPagesMovie.Pages.Actors
                 return NotFound();
             }
             Actor = actor;
+            PopulateActedMoviesData(_context, Actor);
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id, string[] selectedMovies)
         {
+            if (Actor == null || id == null || !ActorExists(Actor.ID))
+            {
+                return NotFound();
+            }
+            
+            // either use [BindNever] or remove it from ModelState
+            // ModelState.Remove("ActorMoviePairs");
             if (!ModelState.IsValid)
             {
+                PopulateActedMoviesData(_context, Actor);
                 return Page();
             }
 
-            _context.Attach(Actor).State = EntityState.Modified;
+            await UpdateActorMoviePairs(selectedMovies, Actor);
 
-            try
-            {
-                await _context.SaveChangesAsync();
+            if (await TryUpdateModelAsync<Actor>(
+                Actor,
+                "Actor",   // Prefix for form value.
+                s => s.LastName, s => s.FirstMidName, s => s.BirthDate)) {
+                    try {
+                        _context.Attach(Actor).State = EntityState.Modified;
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException) {
+                        throw;
+                    }
+                    return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ActorExists(Actor.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
+            PopulateActedMoviesData(_context, Actor);
+            return Page();
         }
 
         private bool ActorExists(int id)
         {
           return (_context.Actor?.Any(e => e.ID == id)).GetValueOrDefault();
         }
+
+        public async Task UpdateActorMoviePairs(string[] selectedMovies, Actor actorToUpdate) {
+
+            var selectedMoviesHS = new HashSet<string>(selectedMovies);
+            var actorMoviesHS = new HashSet<string> (
+                _context.ActorMoviePair.Where(i => i.ActorID == actorToUpdate.ID)
+                .Select(c => c.MovieID.ToString())
+            );
+
+            var addedMoviesHS = selectedMoviesHS.Except(actorMoviesHS);
+            var removedMoviesHS = actorMoviesHS.Except(selectedMoviesHS);
+
+            // remove ActorMoviePairs
+            var removedActorMoviePairs = _context.ActorMoviePair
+                .Where(i => i.ActorID == actorToUpdate.ID)
+                .Where(i => removedMoviesHS.Contains(i.MovieID.ToString()));
+            _context.ActorMoviePair.RemoveRange(removedActorMoviePairs);
+
+            // create new ActorMoviePairs
+            // var movies = _context.Movie.Where(i => addedMoviesHS.Contains(i.ID.ToString()));
+            var newActorMoviePairs = new List<ActorMoviePair> {};
+            foreach (var m in addedMoviesHS) {
+                newActorMoviePairs.Add(
+                    new ActorMoviePair{ActorID = actorToUpdate.ID, MovieID = int.Parse(m)}
+                );
+            }
+            _context.ActorMoviePair.AddRange(newActorMoviePairs);
+
+            try {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) {
+                throw;
+            }
+        }
+
+
     }
 }

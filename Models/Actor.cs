@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace RazorPagesMovie.Models
 {
@@ -27,8 +28,8 @@ namespace RazorPagesMovie.Models
                 return LastName + ", " + FirstMidName;
             }
         }
-
-        public ICollection<ActorMoviePair> ActorMoviePairs { get; set; } = default!;
+        [BindNever]
+        public ICollection<ActorMoviePair>? ActorMoviePairs { get; set; }
 
     }
 }

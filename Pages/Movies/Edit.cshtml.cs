@@ -62,7 +62,7 @@ namespace RazorPagesMovie.Pages.Movies
             // avoid overposting 
             if (await TryUpdateModelAsync<Movie>(
                 Movie,
-                "movie",   // Prefix for form value.
+                "Movie",   // Prefix for form value.
                 s => s.Title, s => s.ReleaseDate, s => s.Price, s => s.Genre, s => s.Rating, s => s.StudioID)) {
                 try {
                     await _context.SaveChangesAsync();

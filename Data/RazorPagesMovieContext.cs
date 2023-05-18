@@ -36,9 +36,23 @@ namespace RazorPagesMovie.Data
             modelBuilder.Entity<Studio>().ToTable(nameof(Studio))
                 .Property(d => d.ConcurrencyToken)
                 .IsConcurrencyToken();
+            // by convention they are already generated 
+            // modelBuilder.Entity<Studio>().ToTable(nameof(Studio))
+            //     .HasMany(i => i.Movies)
+            //     .WithOne(i => i.Studio)
+            //     .HasForeignKey(e => e.StudioID)
+            //     .IsRequired();;
             modelBuilder.Entity<Actor>().ToTable(nameof(Actor));
-            modelBuilder.Entity<ActorMoviePair>().ToTable("ActorMoviePair");
-            modelBuilder.Entity<Director>().ToTable(nameof(Director));
+            modelBuilder.Entity<ActorMoviePair>().ToTable(nameof(ActorMoviePair));
+
+            // by convention they are already generated 
+            // modelBuilder.Entity<Director>().ToTable(nameof(Director))
+            //     .HasOne(c => c.Home)
+            //     .WithOne(i => i.Director);
+            // modelBuilder.Entity<Director>().ToTable(nameof(Director))
+            //     .HasOne(c => c.Studio)
+            //     .WithOne(i => i.Director);
+
             modelBuilder.Entity<Home>().ToTable(nameof(Home));
         }
     }
