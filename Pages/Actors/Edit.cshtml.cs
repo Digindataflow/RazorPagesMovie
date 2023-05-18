@@ -64,6 +64,8 @@ namespace RazorPagesMovie.Pages.Actors
                 "Actor",   // Prefix for form value.
                 s => s.LastName, s => s.FirstMidName, s => s.BirthDate)) {
                     try {
+                        // if called outside, it will set ActorMoviePair fix-up
+                        // because it's loaded 
                         _context.Attach(Actor).State = EntityState.Modified;
                         await _context.SaveChangesAsync();
                     }
@@ -96,6 +98,8 @@ namespace RazorPagesMovie.Pages.Actors
             var removedActorMoviePairs = _context.ActorMoviePair
                 .Where(i => i.ActorID == actorToUpdate.ID)
                 .Where(i => removedMoviesHS.Contains(i.MovieID.ToString()));
+            // can also use ExecuteDelete
+            // .ExecuteDelete; 
             _context.ActorMoviePair.RemoveRange(removedActorMoviePairs);
 
             // create new ActorMoviePairs

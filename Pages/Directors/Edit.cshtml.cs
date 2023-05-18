@@ -48,48 +48,50 @@ namespace RazorPagesMovie.Pages.Directors
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(int? id, string[] selectedMovies)
         {
+            var directorToUpdate = await _context.Director
+                .Include(i => i.Movies)
+                .Include(i => i.Home) 
+                .Include(i => i.Studio)
+                // .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
 
-            if (Director == null || id == null)
+            if (Director == null || id == null || !DirectorExists(Director.ID) || directorToUpdate == null)
             {
                 return NotFound();
             }
 
+            ModelState.Remove("Director.Home.Director");
             if (!ModelState.IsValid)
             {
-                PopulateDirectedMoviesData(_context, Director);
+                PopulateDirectedMoviesData(_context, directorToUpdate);
                 return Page();
             }
 
-            _context.Attach(Director).State = EntityState.Modified;
+            UpdateDirectorHome(directorToUpdate);
+            UpdateDirectorProperties(directorToUpdate);
 
-            if (await TryUpdateModelAsync<Director>(
-                Director,
-                "Director",   // Prefix for form value.
-                s => s.LastName, s => s.FirstMidName, s => s.HireDate, s => s.Home)) {
+            // if (await TryUpdateModelAsync<Director>(
+            //     directorToUpdate,
+            //     "Director",   // Prefix for form value.
+            //     s => s.LastName, s => s.FirstMidName, s => s.HireDate, s => s.Home)) {
 
-                    // if home is empty, set it to null 
-                    if (String.IsNullOrWhiteSpace(Director.Home?.Location)) {
-                        Director.Home = null;
-                    }
-                    UpdateDirectorMovies(selectedMovies, Director);
-                    PopulateDirectedMoviesData(_context, Director);
+            // _context.Attach(directorToUpdate).State = EntityState.Modified;
+            // _context.Entry(Director).Collection(i => i.Movies).Load();
+            // _context.Entry(Director).Reference(i => i.Studio).Load();
 
-                    try {
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException) {
-                        if (!DirectorExists(Director.ID)) {
-                            return NotFound();
-                        }
-                        else {
-                            throw;
-                        }
-                    }
-                    return RedirectToPage("./Index");
+            UpdateDirectorMovies(selectedMovies, directorToUpdate);
+
+            try {
+                await _context.SaveChangesAsync();
             }
-            UpdateDirectorMovies(selectedMovies, Director);
-            PopulateDirectedMoviesData(_context, Director);
-            return Page();
+            catch (DbUpdateConcurrencyException) {
+                throw;
+            }
+            return RedirectToPage("./Index");
+            // }
+            // UpdateDirectorMovies(selectedMovies, directorToUpdate);
+            // PopulateDirectedMoviesData(_context, directorToUpdate);
+            // return Page();
         }
 
         private bool DirectorExists(int id)
@@ -97,10 +99,32 @@ namespace RazorPagesMovie.Pages.Directors
           return (_context.Director?.Any(e => e.ID == id)).GetValueOrDefault();
         }
 
+        public void UpdateDirectorProperties(Director directorToUpdate) {
+            directorToUpdate.LastName = Director.LastName;
+            directorToUpdate.FirstMidName = Director.FirstMidName;
+            directorToUpdate.HireDate = Director.HireDate;
+        }
 
-        public void UpdateDirectorMovies(string[] selectedMovies,
-                                        Director directorToUpdate)
-        {
+        public void UpdateDirectorHome(Director directorToUpdate) {
+            // if home is empty, set it to null 
+            if (String.IsNullOrWhiteSpace(Director.Home?.Location)) {
+                directorToUpdate.Home = null;
+                return;
+            }
+            // var home = _context.Home
+            //     // .AsNoTracking()
+            //     .SingleOrDefault(i => i.DirectorID == directorToUpdate.ID);
+            // if (home != null) {
+            //     directorToUpdate.Home.ID = home.ID;
+            // }
+            if (directorToUpdate.Home == null) {
+                directorToUpdate.Home = new Home{};
+            }
+            directorToUpdate.Home.Location = Director.Home.Location;
+            directorToUpdate.Home.Director = directorToUpdate;
+        }
+
+        public void UpdateDirectorMovies(string[] selectedMovies, Director directorToUpdate) {
             // if nothing selected, initialize as empty
             if (selectedMovies == null)
             {
@@ -120,8 +144,6 @@ namespace RazorPagesMovie.Pages.Directors
                 directorToUpdate.Movies = new List<Movie>();
             }
 
-            if (_context.Movie != null) {
-                // if selected, add it. 
             foreach (var movie in _context.Movie)
             {
                 if (selectedMoviesHS.Contains(movie.ID.ToString()))
@@ -140,7 +162,6 @@ namespace RazorPagesMovie.Pages.Directors
                         directorToUpdate.Movies.Remove(movieToRemove);
                     }
                 }
-            }
             }
 
         }
