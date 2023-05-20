@@ -73,7 +73,7 @@ namespace RazorPagesMovie.Pages.Studios
                 return NotFound();
             }
 
-            _context.Attach(Studio).State = EntityState.Modified;
+            // _context.Attach(Studio).State = EntityState.Modified;
             studioToUpdate.ConcurrencyToken = Guid.NewGuid();
 
             // Set ConcurrencyToken to value read in OnGetAsync
@@ -146,7 +146,7 @@ namespace RazorPagesMovie.Pages.Studios
                     $"Current value: {dbValues.StartDate:d}");
             }
             if (dbValues.DirectorID != clientValues.DirectorID) {
-                if (_context.Director != null && dbValues.DirectorID != null){
+                if (dbValues.DirectorID != null){
                     Director dbDirector = await _context.Director
                     .FindAsync(dbValues.DirectorID);
                     ModelState.AddModelError("Studio.DirectorID",

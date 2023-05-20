@@ -29,21 +29,24 @@ namespace RazorPagesMovie.Data
         */
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {   
-            // add many-to-many relationship
-            modelBuilder.Entity<Movie>().ToTable(nameof(Movie))
-                .HasMany(c => c.Directors)
-                .WithMany(i => i.Movies);
+
             modelBuilder.Entity<Studio>().ToTable(nameof(Studio))
                 .Property(d => d.ConcurrencyToken)
                 .IsConcurrencyToken();
             // by convention they are already generated 
+            
+            // add many-to-many relationship
+            // modelBuilder.Entity<Movie>().ToTable(nameof(Movie))
+            //     .HasMany(c => c.Directors)
+            //     .WithMany(i => i.Movies);
+
             // modelBuilder.Entity<Studio>().ToTable(nameof(Studio))
             //     .HasMany(i => i.Movies)
             //     .WithOne(i => i.Studio)
             //     .HasForeignKey(e => e.StudioID)
             //     .IsRequired();;
-            modelBuilder.Entity<Actor>().ToTable(nameof(Actor));
-            modelBuilder.Entity<ActorMoviePair>().ToTable(nameof(ActorMoviePair));
+            // modelBuilder.Entity<Actor>().ToTable(nameof(Actor));
+            // modelBuilder.Entity<ActorMoviePair>().ToTable(nameof(ActorMoviePair));
 
             // by convention they are already generated 
             // modelBuilder.Entity<Director>().ToTable(nameof(Director))
@@ -53,7 +56,7 @@ namespace RazorPagesMovie.Data
             //     .HasOne(c => c.Studio)
             //     .WithOne(i => i.Director);
 
-            modelBuilder.Entity<Home>().ToTable(nameof(Home));
+            // modelBuilder.Entity<Home>().ToTable(nameof(Home));
         }
     }
 }

@@ -14,10 +14,12 @@ namespace RazorPagesMovie.Pages.Directors
     public class EditModel : DirectorMoviePageModel
     {
         private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
+        private readonly ILogger<EditModel> _logger;
 
-        public EditModel(RazorPagesMovie.Data.RazorPagesMovieContext context)
+        public EditModel(RazorPagesMovie.Data.RazorPagesMovieContext context, ILogger<EditModel> logger)
         {
             _context = context;
+            _logger = logger; 
         }
 
         [BindProperty]
@@ -52,7 +54,6 @@ namespace RazorPagesMovie.Pages.Directors
                 .Include(i => i.Movies)
                 .Include(i => i.Home) 
                 .Include(i => i.Studio)
-                // .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
 
             if (Director == null || id == null || !DirectorExists(Director.ID) || directorToUpdate == null)
@@ -67,18 +68,8 @@ namespace RazorPagesMovie.Pages.Directors
                 return Page();
             }
 
+            _context.Entry(directorToUpdate).CurrentValues.SetValues(Director);
             UpdateDirectorHome(directorToUpdate);
-            UpdateDirectorProperties(directorToUpdate);
-
-            // if (await TryUpdateModelAsync<Director>(
-            //     directorToUpdate,
-            //     "Director",   // Prefix for form value.
-            //     s => s.LastName, s => s.FirstMidName, s => s.HireDate, s => s.Home)) {
-
-            // _context.Attach(directorToUpdate).State = EntityState.Modified;
-            // _context.Entry(Director).Collection(i => i.Movies).Load();
-            // _context.Entry(Director).Reference(i => i.Studio).Load();
-
             UpdateDirectorMovies(selectedMovies, directorToUpdate);
 
             try {
@@ -88,21 +79,11 @@ namespace RazorPagesMovie.Pages.Directors
                 throw;
             }
             return RedirectToPage("./Index");
-            // }
-            // UpdateDirectorMovies(selectedMovies, directorToUpdate);
-            // PopulateDirectedMoviesData(_context, directorToUpdate);
-            // return Page();
         }
 
         private bool DirectorExists(int id)
         {
           return (_context.Director?.Any(e => e.ID == id)).GetValueOrDefault();
-        }
-
-        public void UpdateDirectorProperties(Director directorToUpdate) {
-            directorToUpdate.LastName = Director.LastName;
-            directorToUpdate.FirstMidName = Director.FirstMidName;
-            directorToUpdate.HireDate = Director.HireDate;
         }
 
         public void UpdateDirectorHome(Director directorToUpdate) {
@@ -111,12 +92,6 @@ namespace RazorPagesMovie.Pages.Directors
                 directorToUpdate.Home = null;
                 return;
             }
-            // var home = _context.Home
-            //     // .AsNoTracking()
-            //     .SingleOrDefault(i => i.DirectorID == directorToUpdate.ID);
-            // if (home != null) {
-            //     directorToUpdate.Home.ID = home.ID;
-            // }
             if (directorToUpdate.Home == null) {
                 directorToUpdate.Home = new Home{};
             }
@@ -131,38 +106,12 @@ namespace RazorPagesMovie.Pages.Directors
                 directorToUpdate.Movies = new List<Movie>();
                 return;
             }
-
-            var selectedMoviesHS = new HashSet<string>(selectedMovies);
-            HashSet<int> directorMovies;
-
-            if (directorToUpdate.Movies != null) {
-                directorMovies = new HashSet<int>
-                (directorToUpdate.Movies.Select(c => c.ID));
-            }
-            else {
-                directorMovies = new HashSet<int>();
-                directorToUpdate.Movies = new List<Movie>();
-            }
-
-            foreach (var movie in _context.Movie)
-            {
-                if (selectedMoviesHS.Contains(movie.ID.ToString()))
-                {
-                    if (!directorMovies.Contains(movie.ID))
-                    {
-                        directorToUpdate.Movies.Add(movie);
-                    }
-                }
-                else
-                {
-                    if (directorMovies.Contains(movie.ID))
-                    {
-                        var movieToRemove = directorToUpdate.Movies.Single(
-                                                        c => c.ID == movie.ID);
-                        directorToUpdate.Movies.Remove(movieToRemove);
-                    }
-                }
-            }
+            // get selected movies and set navigation property 
+            var selectedMovieIDs = selectedMovies.Select(int.Parse).ToArray();
+            var selectedMovieInstances = _context.Movie
+                .Where(i => selectedMovieIDs.Any(j => j == i.ID))
+                .ToList();
+            directorToUpdate.Movies = selectedMovieInstances;
 
         }
     }

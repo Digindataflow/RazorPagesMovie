@@ -37,12 +37,12 @@ public class Movie
     public string Rating { get; set; } = string.Empty;
 
     [Required]
-    public ICollection<ActorMoviePair> ActorMoviePairs { get; set; } = default!;
+    public ICollection<ActorMoviePair> ActorMoviePairs { get; set; } = new List<ActorMoviePair>();
 
     // If FK property StudioID is not included, 
     // The Studio property is null if it's not explicitly loaded when Movie is fetched. 
     // To update the Movie entity, the Studio entity must first be fetched.
     public int StudioID { get; set; }
     public Studio Studio { get; set; } = default!;
-    public ICollection<Director> Directors { get; set; } = default!;
+    public ICollection<Director> Directors { get; set; } = new List<Director>();
 }
