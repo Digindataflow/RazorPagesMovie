@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
+using RazorPagesMovie.Pages.Shared.FormInputs;
 
 namespace RazorPagesMovie.Pages.Directors
 {
@@ -24,6 +25,7 @@ namespace RazorPagesMovie.Pages.Directors
 
         [BindProperty]
         public Director Director { get; set; } = default!;
+        public SelectList? StudioNameSL { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -35,14 +37,18 @@ namespace RazorPagesMovie.Pages.Directors
             var director =  await _context.Director
                 .Include(i => i.Movies)
                 .Include(i => i.Home) 
+                .Include(i => i.Studio)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (director == null)
             {
                 return NotFound();
             }
+
+            // set up form input data
             Director = director;
             PopulateDirectedMoviesData(_context, Director);
+            StudioNameSL = StudiosDropDownList.Get(_context, director.Studio?.ID);
             return Page();
         }
 
@@ -62,14 +68,17 @@ namespace RazorPagesMovie.Pages.Directors
             }
 
             ModelState.Remove("Director.Home.Director");
+            ModelState.Remove("Director.Studio.Name");
             if (!ModelState.IsValid)
             {
                 PopulateDirectedMoviesData(_context, directorToUpdate);
+                StudioNameSL = StudiosDropDownList.Get(_context, directorToUpdate.Studio?.ID);
                 return Page();
             }
 
             _context.Entry(directorToUpdate).CurrentValues.SetValues(Director);
             UpdateDirectorHome(directorToUpdate);
+            UpdateDirectorStudio(directorToUpdate);
             UpdateDirectorMovies(selectedMovies, directorToUpdate);
 
             try {
@@ -78,6 +87,8 @@ namespace RazorPagesMovie.Pages.Directors
             catch (DbUpdateConcurrencyException) {
                 throw;
             }
+            PopulateDirectedMoviesData(_context, directorToUpdate);
+            StudioNameSL = StudiosDropDownList.Get(_context, directorToUpdate.Studio?.ID);
             return RedirectToPage("./Index");
         }
 
@@ -97,6 +108,17 @@ namespace RazorPagesMovie.Pages.Directors
             }
             directorToUpdate.Home.Location = Director.Home.Location;
             directorToUpdate.Home.Director = directorToUpdate;
+        }
+
+
+        public void UpdateDirectorStudio(Director directorToUpdate) {
+            // if Studio is empty, set it to null 
+            if (Director.Studio is null) {
+                directorToUpdate.Studio = null;
+                return;
+            }
+            var newSdutio = _context.Studio.Where(i => i.ID == Director.Studio.ID).Single();
+            directorToUpdate.Studio = newSdutio;
         }
 
         public void UpdateDirectorMovies(string[] selectedMovies, Director directorToUpdate) {
