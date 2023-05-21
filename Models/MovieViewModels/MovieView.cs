@@ -1,12 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace RazorPagesMovie.Models;
+namespace RazorPagesMovie.Models.MovieViewModels;
 
-public class Movie
+public class MovieView
 {
-    public int ID { get; set; }
-
     [StringLength(60, MinimumLength = 3)]
     [Required]
     public string Title { get; set; } = string.Empty;
@@ -35,16 +33,6 @@ public class Movie
     [StringLength(5)]
     [Required]
     public string Rating { get; set; } = string.Empty;
-
-    [Required]
-    public ICollection<ActorMoviePair> ActorMoviePairs { get; set; } = new List<ActorMoviePair>();
-
-    // If FK property StudioID is not included, 
-    // The Studio property is null if it's not explicitly loaded when Movie is fetched. 
-    // To update the Movie entity, the Studio entity must first be fetched.
+    [Display(Name = "Studio")]
     public int StudioID { get; set; }
-    public Studio Studio { get; set; } = default!;
-    public ICollection<Director> Directors { get; set; } = new List<Director>();
-
-    public MovieRating? Star { get; set; }
 }

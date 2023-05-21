@@ -90,7 +90,7 @@ namespace RazorPagesMovie.Pages.Movies
 
             // get record list 
             // data is not cached and tracked, save RAM 
-            var pageSize = Configuration.GetValue("PageSize", 4);
+            var pageSize = Configuration.GetValue("PageSize", 20);
             Movie = await PaginatedList<Movie>.CreateAsync(
                 movies.AsNoTracking().Include(s => s.Studio), 
                 pageIndex ?? 1, 

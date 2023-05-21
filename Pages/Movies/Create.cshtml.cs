@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using RazorPagesMovie.Data;
@@ -12,9 +13,11 @@ namespace RazorPagesMovie.Pages.Movies
 {
     public class CreateModel : StudioNamePageModel
     {
-        private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
+        private readonly RazorPagesMovieContext _context;
+        [BindProperty]
+        public RazorPagesMovie.Models.MovieViewModels.MovieView Movie { get; set; } = default!;
 
-        public CreateModel(RazorPagesMovie.Data.RazorPagesMovieContext context)
+        public CreateModel(RazorPagesMovieContext context)
         {
             _context = context;
         }
@@ -25,35 +28,28 @@ namespace RazorPagesMovie.Pages.Movies
             return Page();
         }
 
-        [BindProperty]
-        public Movie Movie { get; set; } = default!;
-        
-
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Movie == null || Movie == null)
+            if (_context.Movie == null || Movie == null) {
+                return NotFound();
+            }
+            
+            if (!ModelState.IsValid)
             {
-                PopulateStudiosDropDownList(_context);
+                PopulateStudiosDropDownList(_context, Movie.StudioID);
                 return Page();
             }
 
             var emptyMovie = new Movie();
-            // limit which fields to be got from form value in PageContext 
-            // avoid overposting 
-            if (await TryUpdateModelAsync<Movie>(
-                emptyMovie,
-                "Movie",   // Prefix for form value.
-                s => s.Title, s => s.ReleaseDate, s => s.Price, s => s.Genre, s => s.Rating, s => s.StudioID)) 
-            {
-                _context.Movie.Add(Movie);
+            _context.Movie.Add(emptyMovie).CurrentValues.SetValues(Movie);
+            try {
                 await _context.SaveChangesAsync();
-
-                return RedirectToPage("./Index");
             }
-            // Select StudioID if TryUpdateModelAsync fails.
-            PopulateStudiosDropDownList(_context, emptyMovie.StudioID);
-            return Page();
+            catch (DbUpdateConcurrencyException) {
+                throw;
+            }
+            return RedirectToPage("./Index");
 
         }
     }

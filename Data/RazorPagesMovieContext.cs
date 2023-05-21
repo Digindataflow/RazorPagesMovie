@@ -15,6 +15,7 @@ namespace RazorPagesMovie.Data
         }
 
         public DbSet<RazorPagesMovie.Models.Movie> Movie { get; set; } = null!;
+        public DbSet<RazorPagesMovie.Models.MovieRating> MovieRating { get; set; } = null!;
         public DbSet<RazorPagesMovie.Models.Actor> Actor { get; set; } = null!;
         public DbSet<RazorPagesMovie.Models.ActorMoviePair> ActorMoviePair { get; set; } = null!;
         public DbSet<RazorPagesMovie.Models.Studio> Studio { get; set; } = null!;
