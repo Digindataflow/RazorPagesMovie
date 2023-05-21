@@ -20,7 +20,7 @@ namespace RazorPagesMovie.Pages.Studios
         }
 
         [BindProperty]
-        public Studio? Studio { get; set; }
+        public Studio Studio { get; set; } = null!;
         public string ConcurrencyErrorMessage { get; set; } = string.Empty;
 
         public async Task<IActionResult> OnGetAsync(int? id, bool? concurrencyError)
@@ -32,6 +32,7 @@ namespace RazorPagesMovie.Pages.Studios
 
             var studio = await _context.Studio
                 .Include(d => d.Director)
+                .Include(d => d.Movies)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.ID == id);
 

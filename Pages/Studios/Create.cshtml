@@ -30,7 +30,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="Studio.DirectorID" class="control-label"></label>
-                <select asp-for="Studio.DirectorID" class ="form-control" asp-items="ViewBag.DirectorID"></select>
+                <select asp-for="Studio.DirectorID" class ="form-control" 
+                    asp-items="@Model.DirectorNameSL">
+                <option value="">-- Select Director --</option>    
+                </select>
+                <span asp-validation-for="Studio.DirectorID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

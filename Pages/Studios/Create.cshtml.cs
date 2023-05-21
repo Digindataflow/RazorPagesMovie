@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
 
@@ -12,22 +13,25 @@ namespace RazorPagesMovie.Pages.Studios
 {
     public class CreateModel : PageModel
     {
-        private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
+        private readonly RazorPagesMovieContext _context;
 
-        public CreateModel(RazorPagesMovie.Data.RazorPagesMovieContext context)
+        public CreateModel(RazorPagesMovieContext context)
         {
             _context = context;
         }
+        [BindProperty]
+        public RazorPagesMovie.Models.StudioViewModels.StudioViewModel Studio { get; set; } = null!;
+        public SelectList DirectorNameSL { get; set; } = null!;
 
         public IActionResult OnGet()
         {
-        ViewData["DirectorID"] = new SelectList(_context.Director, "ID", "FirstMidName");
+            DirectorNameSL = new SelectList(
+                _context.Director.Where(i => i.Studio == null), 
+                nameof(Director.ID), 
+                nameof(Director.FullName)
+            );
             return Page();
         }
-
-        [BindProperty]
-        public Studio Studio { get; set; } = default!;
-        
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -37,9 +41,14 @@ namespace RazorPagesMovie.Pages.Studios
                 return Page();
             }
 
-            _context.Studio.Add(Studio);
-            await _context.SaveChangesAsync();
-
+            var newStudio = new Studio();
+            _context.Studio.Add(newStudio).CurrentValues.SetValues(Studio);
+            try {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) {
+                throw;
+            }
             return RedirectToPage("./Index");
         }
     }

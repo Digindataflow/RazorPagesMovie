@@ -13,16 +13,16 @@ namespace RazorPagesMovie.Pages.Studios
 {
     public class EditModel : PageModel
     {
-        private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
+        private readonly RazorPagesMovieContext _context;
 
-        public EditModel(RazorPagesMovie.Data.RazorPagesMovieContext context)
+        public EditModel(RazorPagesMovieContext context)
         {
             _context = context;
         }
 
         [BindProperty]
-        public Studio? Studio { get; set; }
-        public SelectList? DirectorNameSL { get; set; }
+        public RazorPagesMovie.Models.StudioViewModels.StudioViewModel Studio { get; set; } = null!;
+        public SelectList DirectorNameSL { get; set; } = null!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -40,10 +40,20 @@ namespace RazorPagesMovie.Pages.Studios
                 return NotFound();
             }
 
-            Studio = studio;
+            Studio = new Models.StudioViewModels.StudioViewModel {
+                Name = studio.Name,
+                Budget = studio.Budget,
+                StartDate = studio.StartDate,
+                DirectorID = studio.DirectorID,
+                ConcurrencyToken = studio.ConcurrencyToken
+            };
             // Use strongly typed data rather than ViewData.
-            DirectorNameSL = new SelectList(_context.Director, "ID", "FirstMidName");
-            // ViewData["DirectorID"] = new SelectList(_context.Director, "ID", "FirstMidName");
+            DirectorNameSL = new SelectList(
+                _context.Director.Where(i => i.Studio == null || i.Studio == studio), 
+                nameof(Director.ID), 
+                nameof(Director.FullName), 
+                Studio.DirectorID
+            );
             return Page();
         }
 
@@ -58,7 +68,7 @@ namespace RazorPagesMovie.Pages.Studios
             if (Studio == null || _context.Studio == null ) {
                 return NotFound();
             }
-            // Fetch current department from DB.
+            // Fetch current studio from DB.
             // ConcurrencyToken may have changed.
             var studioToUpdate = await _context.Studio
                 .Include(i => i.Director)
@@ -69,51 +79,46 @@ namespace RazorPagesMovie.Pages.Studios
                 return HandleDeletedStudio();
             }
 
-            if (studioToUpdate.ID != Studio.ID) {
-                return NotFound();
-            }
-
-            // _context.Attach(Studio).State = EntityState.Modified;
+            _context.Entry(studioToUpdate).CurrentValues.SetValues(Studio);
             studioToUpdate.ConcurrencyToken = Guid.NewGuid();
 
             // Set ConcurrencyToken to value read in OnGetAsync
             _context.Entry(studioToUpdate).Property(d => d.ConcurrencyToken)
                                    .OriginalValue = Studio.ConcurrencyToken;
 
-            if (await TryUpdateModelAsync<Studio>(
-                studioToUpdate,
-                "Studio",
-                s => s.Name, s => s.StartDate, s => s.Budget, s => s.DirectorID))
+            try
             {
-                try
+                await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                var exceptionEntry = ex.Entries.Single();
+                var clientValues = (Studio)exceptionEntry.Entity;
+                var databaseEntry = exceptionEntry.GetDatabaseValues();
+                if (databaseEntry == null)
                 {
-                    await _context.SaveChangesAsync();
-                    return RedirectToPage("./Index");
+                    ModelState.AddModelError(string.Empty, "Unable to save. " +
+                        "The studio was deleted by another user.");
+                    return Page();
                 }
-                catch (DbUpdateConcurrencyException ex)
-                {
-                    var exceptionEntry = ex.Entries.Single();
-                    var clientValues = (Studio)exceptionEntry.Entity;
-                    var databaseEntry = exceptionEntry.GetDatabaseValues();
-                    if (databaseEntry == null)
-                    {
-                        ModelState.AddModelError(string.Empty, "Unable to save. " +
-                            "The studio was deleted by another user.");
-                        return Page();
-                    }
 
-                    var dbValues = (Studio)databaseEntry.ToObject();
-                    await SetDbErrorMessage(dbValues, clientValues, _context);
+                var dbValues = (Studio)databaseEntry.ToObject();
+                await SetDbErrorMessage(dbValues, clientValues, _context);
 
-                    // Save the current ConcurrencyToken so next postback
-                    // matches unless an new concurrency issue happens.
-                    Studio.ConcurrencyToken = dbValues.ConcurrencyToken;
-                    // Clear the model error for the next postback.
-                    ModelState.Remove($"{nameof(Studio)}.{nameof(Studio.ConcurrencyToken)}");
-                }
+                // Save the current ConcurrencyToken so next postback
+                // matches unless an new concurrency issue happens.
+                Studio.ConcurrencyToken = dbValues.ConcurrencyToken;
+                // Clear the model error for the next postback.
+                ModelState.Remove($"{nameof(Studio)}.{nameof(Studio.ConcurrencyToken)}");
             }
 
-            DirectorNameSL = new SelectList(_context.Director, "ID", "FullName", studioToUpdate.DirectorID);
+            DirectorNameSL = new SelectList(
+                _context.Director.Where(i => i.Studio == null || i.Studio == studioToUpdate), 
+                nameof(Director.ID), 
+                nameof(Director.FullName), 
+                studioToUpdate.DirectorID
+            );
             return Page();
         }
 
@@ -146,9 +151,8 @@ namespace RazorPagesMovie.Pages.Studios
                     $"Current value: {dbValues.StartDate:d}");
             }
             if (dbValues.DirectorID != clientValues.DirectorID) {
-                if (dbValues.DirectorID != null){
-                    Director dbDirector = await _context.Director
-                    .FindAsync(dbValues.DirectorID);
+                if (dbValues.DirectorID is not null){
+                    Director dbDirector = await _context.Director.FindAsync(dbValues.DirectorID);
                     ModelState.AddModelError("Studio.DirectorID",
                         $"Current value: {dbDirector?.FullName}");
                 } 

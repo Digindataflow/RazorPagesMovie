@@ -44,9 +44,27 @@
         <dd class="col-sm-10">
             @if (Model.Studio.Director != null)
             {
-                @Html.DisplayFor(model => model.Studio!.Director.FullName)
+                @Html.DisplayFor(model => model.Studio.Director.FullName)
             }
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Studio.Movies)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Studio.Movies != null)
+            {
+                @:<ul>
+                @foreach (var m in Model.Studio.Movies)
+                {
+                    @:<li>
+                        @m.Title
+                    @:</li>
+                }
+                @:</ul>
+            }
+
+        </dd>
+
     </dl>
     
     <form method="post">

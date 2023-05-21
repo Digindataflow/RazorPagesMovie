@@ -13,15 +13,7 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Studio.ID" />
             <input type="hidden" asp-for="Studio.ConcurrencyToken" />
-            <div class="form-group">
-                <label>Version</label>
-                @if (Model.Studio != null)
-                {
-                    @Utils.Utility.GetLastChars(Model.Studio.ConcurrencyToken)
-                }
-            </div>
             <div class="form-group">
                 <label asp-for="Studio.Name" class="control-label"></label>
                 <input asp-for="Studio.Name" class="form-control" />

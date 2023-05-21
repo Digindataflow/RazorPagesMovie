@@ -19,7 +19,7 @@ namespace RazorPagesMovie.Pages.Studios
             _context = context;
         }
 
-      public Studio Studio { get; set; } = default!; 
+      public Studio Studio { get; set; } = null!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,15 +28,17 @@ namespace RazorPagesMovie.Pages.Studios
                 return NotFound();
             }
 
-            var studio = await _context.Studio.FirstOrDefaultAsync(m => m.ID == id);
+            var studio = await _context.Studio
+                .Include(i => i.Director)
+                .Include(i => i.Movies)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (studio == null)
             {
                 return NotFound();
             }
-            else 
-            {
-                Studio = studio;
-            }
+
+            Studio = studio;
             return Page();
         }
     }

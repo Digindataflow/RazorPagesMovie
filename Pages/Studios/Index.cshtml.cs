@@ -19,7 +19,7 @@ namespace RazorPagesMovie.Pages.Studios
             _context = context;
         }
 
-        public IList<Studio> Studios { get;set; } = default!;
+        public IList<Studio> Studios { get;set; } = null!;
 
         public async Task OnGetAsync()
         {
