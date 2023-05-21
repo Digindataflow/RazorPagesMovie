@@ -16,7 +16,7 @@ namespace RazorPagesMovie.Pages.Movies
         }
 
         [BindProperty]
-        public RazorPagesMovie.Models.MovieViewModels.MovieRating MovieRating { get; set; } = null!;
+        public RazorPagesMovie.Models.MovieViewModels.MovieRatingView MovieRating { get; set; } = null!;
         public Movie Movie { get; set; } = null!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -38,12 +38,12 @@ namespace RazorPagesMovie.Pages.Movies
             var movieRating = movie.Star;
 
             if (movieRating is null) {
-                MovieRating = new RazorPagesMovie.Models.MovieViewModels.MovieRating {
+                MovieRating = new RazorPagesMovie.Models.MovieViewModels.MovieRatingView {
                     MovieID = MovieID,
                 };
             }
             else {
-                MovieRating = new RazorPagesMovie.Models.MovieViewModels.MovieRating {
+                MovieRating = new RazorPagesMovie.Models.MovieViewModels.MovieRatingView {
                     MovieID = MovieID,
                     Star = movieRating.Star,
                     Comment = movieRating.Comment
