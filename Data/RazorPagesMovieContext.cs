@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RazorPagesMovie.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace RazorPagesMovie.Data
 {
-    public class RazorPagesMovieContext : DbContext
+    public class RazorPagesMovieContext : IdentityDbContext<IdentityUser>
     {
         public RazorPagesMovieContext (DbContextOptions<RazorPagesMovieContext> options)
             : base(options)
@@ -30,10 +32,11 @@ namespace RazorPagesMovie.Data
         */
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {   
-
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Studio>().ToTable(nameof(Studio))
                 .Property(d => d.ConcurrencyToken)
                 .IsConcurrencyToken();
+
             // by convention they are already generated 
             
             // add many-to-many relationship
