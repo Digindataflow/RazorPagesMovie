@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,44 @@ else
         options.UseSqlServer(builder.Configuration.GetConnectionString("ProductionMovieContext")));
 }
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<RazorPagesMovieContext>();
+// requires all users to be authenticated, except for Razor Pages, controllers, or 
+// action methods with an authorization attribute.
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<RazorPagesMovieContext>();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Password settings.
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 10;
+    options.Password.RequiredUniqueChars = 1;
+
+    // Lockout settings.
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+
+    // User settings.
+    options.User.AllowedUserNameCharacters =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;
+});
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // Cookie settings
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.SlidingExpiration = true;
+});
+
 
 var app = builder.Build();
 
@@ -35,7 +73,11 @@ using (var scope = app.Services.CreateScope())
     // Run the app. EnsureCreated creates a database with the new schema.
     // var context = services.GetRequiredService<RazorPagesMovieContext>();
     // context.Database.EnsureCreated();
-    SeedData.Initialize(services);
+
+    // seed data
+    await SeedData.Initialize(services);
+    // add roles 
+    await CreateRoles.Initialize(services);
 
     // to use migrations 
     // run dotnet ef database drop
@@ -61,7 +103,15 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Administrator"));
+    options.AddPolicy("RequireEditorRole", policy => policy.RequireRole("Administrator", "Editor"));
+    options.AddPolicy("RequireReaderRole", policy => policy.RequireRole("Administrator", "Editor", "Reader"));
+});
 
 app.MapRazorPages();
 

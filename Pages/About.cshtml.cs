@@ -2,13 +2,17 @@ using RazorPagesMovie.Models.MovieViewModels;
 using RazorPagesMovie.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RazorPagesMovie.Models;
 
+
 namespace RazorPagesMovie.Pages
 {
+    [AllowAnonymous]
     public class AboutModel : PageModel
     {
         private readonly RazorPagesMovieContext _context;

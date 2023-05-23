@@ -32,6 +32,7 @@ namespace RazorPagesMovie.Data
         */
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {   
+            // build for identity
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Studio>().ToTable(nameof(Studio))
                 .Property(d => d.ConcurrencyToken)

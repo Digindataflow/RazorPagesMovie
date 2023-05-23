@@ -5,7 +5,7 @@ namespace RazorPagesMovie.Models;
 
 public static class SeedData
 {
-    public static void Initialize(IServiceProvider serviceProvider)
+    public static async Task Initialize(IServiceProvider serviceProvider)
     {
         using (var context = new RazorPagesMovieContext(
             serviceProvider.GetRequiredService<
@@ -35,7 +35,7 @@ public static class SeedData
             };
             if (context.Director != null) {
                 context.Director.AddRange(directors);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             var studios = new Studio[] {
@@ -46,7 +46,7 @@ public static class SeedData
             };
             if (context.Studio != null) {
                 context.Studio.AddRange(studios);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             var movies = new Movie[] {
@@ -131,7 +131,7 @@ public static class SeedData
                 }
             };
             context.Movie.AddRange(movies);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
 
             var actors = new Actor[]
             {
@@ -146,7 +146,7 @@ public static class SeedData
             };
             if (context.Actor != null) {
                 context.Actor.AddRange(actors);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             var ActorMoviePairs = new ActorMoviePair[]
@@ -167,7 +167,7 @@ public static class SeedData
 
             if (context.ActorMoviePair != null) {
                 context.ActorMoviePair.AddRange(ActorMoviePairs);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
             var Homes = new Home[]
@@ -187,7 +187,7 @@ public static class SeedData
             };
             if (context.Home != null) {
                 context.Home.AddRange(Homes);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
 
 
