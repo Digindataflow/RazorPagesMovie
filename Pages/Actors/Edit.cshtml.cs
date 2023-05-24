@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+
 using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
 
 namespace RazorPagesMovie.Pages.Actors
 {
+    [Authorize(Roles = "RequireEditorRole")]
     public class EditModel : ActorMoviePageModel
     {
         private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;

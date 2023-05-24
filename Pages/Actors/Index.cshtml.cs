@@ -11,17 +11,17 @@ using RazorPagesMovie.Models;
 
 namespace RazorPagesMovie.Pages.Actors
 {
-    [Authorize]
+    [Authorize(Roles = "RequireReaderRole")]
     public class IndexModel : PageModel
     {
-        private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
+        private readonly RazorPagesMovieContext _context;
 
-        public IndexModel(RazorPagesMovie.Data.RazorPagesMovieContext context)
+        public IndexModel(RazorPagesMovieContext context)
         {
             _context = context;
         }
 
-        public IList<Actor> Actors { get;set; } = default!;
+        public IList<Actor> Actors { get;set; } = null!;
 
         public async Task OnGetAsync()
         {

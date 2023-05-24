@@ -5,21 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
-using RazorPagesMovie.Data;
-using RazorPagesMovie.Models;
-
-namespace RazorPagesMovie.Pages.Actors
+namespace RazorPagesMovie.Pages.Roles
 {
-    [Authorize(Roles = "RequireEditorRole")]
+    [Authorize(Roles = "RequireAdministratorRole")]
     public class CreateModel : PageModel
     {
-        private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
-
-        public CreateModel(RazorPagesMovie.Data.RazorPagesMovieContext context)
+        [BindProperty]
+        public IdentityRole Role { get;set; } = null!;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public CreateModel(RoleManager<IdentityRole> roleManager)
         {
-            _context = context;
+            _roleManager = roleManager;
         }
 
         public IActionResult OnGet()
@@ -27,20 +26,16 @@ namespace RazorPagesMovie.Pages.Actors
             return Page();
         }
 
-        [BindProperty]
-        public Actor Actor { get; set; } = default!;
-        
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Actor == null || Actor == null)
+          if (!ModelState.IsValid || Role == null)
             {
                 return Page();
             }
 
-            _context.Actor.Add(Actor);
-            await _context.SaveChangesAsync();
+            await _roleManager.CreateAsync(Role);
 
             return RedirectToPage("./Index");
         }

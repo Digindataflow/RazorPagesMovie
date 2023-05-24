@@ -61,6 +61,15 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Administrator"));
+    options.AddPolicy("RequireEditorRole", policy => policy.RequireRole("Administrator", "Editor"));
+    options.AddPolicy("RequireReaderRole", policy => policy.RequireRole("Administrator", "Editor", "Reader"));
+});
 
 var app = builder.Build();
 
@@ -102,16 +111,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Administrator"));
-    options.AddPolicy("RequireEditorRole", policy => policy.RequireRole("Administrator", "Editor"));
-    options.AddPolicy("RequireReaderRole", policy => policy.RequireRole("Administrator", "Editor", "Reader"));
-});
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 

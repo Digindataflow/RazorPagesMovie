@@ -4,11 +4,14 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+
 using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
 
 namespace RazorPagesMovie.Pages.Directors
 {
+    [Authorize(Roles = "RequireEditorRole")]
     public class CreateModel : DirectorMoviePageModel
     {
         private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;

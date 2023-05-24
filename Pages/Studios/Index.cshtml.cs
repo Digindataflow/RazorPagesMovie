@@ -14,9 +14,9 @@ namespace RazorPagesMovie.Pages.Studios
     [Authorize(Roles = "RequireReaderRole")]
     public class IndexModel : PageModel
     {
-        private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
+        private readonly RazorPagesMovieContext _context;
 
-        public IndexModel(RazorPagesMovie.Data.RazorPagesMovieContext context)
+        public IndexModel(RazorPagesMovieContext context)
         {
             _context = context;
         }

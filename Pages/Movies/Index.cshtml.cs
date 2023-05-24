@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 using RazorPagesMovie.Utils;
 using RazorPagesMovie.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace RazorPagesMovie.Pages.Movies
 {
+    [Authorize(Roles = "RequireReaderRole")]
     public class IndexModel : PageModel
     {
         private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;

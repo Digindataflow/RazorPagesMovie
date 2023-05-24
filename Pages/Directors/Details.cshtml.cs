@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
 
 namespace RazorPagesMovie.Pages.Directors
 {
+    [Authorize(Roles = "RequireReaderRole")]
     public class DetailsModel : PageModel
     {
         private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;

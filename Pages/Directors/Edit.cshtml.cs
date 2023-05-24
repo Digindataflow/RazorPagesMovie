@@ -6,12 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+
 using RazorPagesMovie.Data;
 using RazorPagesMovie.Models;
 using RazorPagesMovie.Pages.Shared.FormInputs;
 
 namespace RazorPagesMovie.Pages.Directors
 {
+    [Authorize(Roles = "RequireEditorRole")]
     public class EditModel : DirectorMoviePageModel
     {
         private readonly RazorPagesMovie.Data.RazorPagesMovieContext _context;
