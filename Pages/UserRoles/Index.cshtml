@@ -1,0 +1,46 @@
+@page
+@model RazorPagesMovie.Pages.UserRoles.IndexModel
+
+@{
+    ViewData["Title"] = "User Roles";
+}
+
+<h1>User Roles</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserRoles[0].UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserRoles[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserRoles[0].Roles)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.UserRoles) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Roles)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.UserId">Edit</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
